@@ -754,44 +754,52 @@ function renderMoodHistory() {
       <span>我 <strong>${r.me}</strong> 分 　TA <strong>${r.ta}</strong> 分</span>
     </div>`).join('');
 }
-
 /* ══════════════════════════════
-   TRUTH CARD (Claude API)
+   TRUTH CARD (內建題庫版 - 穩定修正)
 ══════════════════════════════ */
-async function drawTruth(lv) {
-  const d = document.getElementById('truthDisp');
-  d.innerHTML='<span class="spin"></span>';
-  const desc={
-    '輕鬆':'輕鬆有趣、溫馨，適合隨時玩，不沉重',
-    '深度':'關於彼此夢想、恐懼、人生觀，有一定深度',
-    '挑戰':'關於關係邊界、過去的傷、期待與失望，勇敢直接'
-  };
-  try {
-    const res = await fetch('https://api.anthropic.com/v1/messages',{
-      method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({
-        model:'claude-sonnet-4-20250514', max_tokens:1000,
-        messages:[{role:'user',content:
-          `你是情侶對話卡牌設計師。請生成一道適合情侶一起回答的問題，風格：${desc[lv]}。\n要求：繁體中文、25~45字、開放式、有溫度、直接輸出問題本身不需任何說明前言。`
-        }]
-      })
-    });
-    const data = await res.json();
-    const q = (data.content||[]).map(b=>b.text||'').join('').trim();
-    d.innerHTML=`<div class="truth-lv">${lv}級問題</div><div class="truth-q">${esc(q)}</div>`;
-    d.style.animation='none';
-    requestAnimationFrame(()=>{ d.style.animation='flip .4s ease'; });
-  } catch {
-    d.innerHTML='<div style="color:var(--muted);font-size:.84rem;">抽取失敗，請再試一次 🎴</div>';
-  }
+const TRUTH_POOL = {
+  '輕鬆': [
+    "如果我們現在能立刻去旅行，你最想跟我去哪裡？",
+    "你最喜歡我身上哪一個小怪癖？",
+    "說出一件我做過讓你覺得「心動」的小事。",
+    "如果我們要一起養一隻寵物，你會選什麼？為什麼？",
+    "第一次約會時，你對我的第一印象是什麼？"
+  ],
+  '深度': [
+    "你覺得我們之間最需要一起進步的地方是什麼？",
+    "在我們這段關係中，你覺得最有安全感的時刻是什麼時候？",
+    "如果你可以改變我們過去的一件事，那會是什麼？",
+    "你對未來五年的生活有什麼樣的藍圖？我在那個藍圖裡嗎？",
+    "什麼樣的溝通方式會讓你覺得最被尊重與理解？"
+  ],
+  '挑戰': [
+    "我曾經做過哪件事，讓你感到最受傷或失望？",
+    "你對我有哪些一直想說但怕吵架而沒說出口的建議？",
+    "你覺得我們現在的親密度（身心）滿分 10 分是多少？如何提高？",
+    "如果明天就是世界末日，你有什麼遺憾是沒跟我一起完成的？",
+    "在感情中，你最害怕失去的是什麼？"
+  ]
 }
+function drawTruth(lv) {
+  const d = document.getElementById('truthDisp');
+  
+  // 顯示抽牌動畫
+  d.innerHTML = '<span class="spin"></span>';
+  
+  setTimeout(() => {
+    const questions = TRUTH_POOL[lv];
+    const randomIndex = Math.floor(Math.random() * questions.length);
+    const q = questions[randomIndex];
 
-/* ══════════════════════════════
-   TOAST
-══════════════════════════════ */
-function toast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent=msg; t.classList.add('show');
+    d.innerHTML = `<div class="truth-lv">${lv}級問題</div><div class="truth-q">${esc(q)}</div>`;
+    
+    // 動效處理
+    d.style.animation = 'none';
+    requestAnimationFrame(() => { 
+      d.style.animation = 'flip .4s ease'; 
+    });
+  }, 500); // 模擬 0.5 秒抽取感
+}
   setTimeout(()=>t.classList.remove('show'), 2800);
 }
 

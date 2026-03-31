@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>我們的小宇宙 💕</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@300;400;600&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --blush: #f7cad0;
+  --rose: #e8809a;
+  --dr: #c0526f;
+  --gold: #d4a853;
+  --cream: #fdf6f0;
+  --dark: #2d1f26;
+  --muted: #8a6a74;
+  --green: #5a9e7c;
+  --purple: #9b7ec8;
+  --teal: #5aacb0;
+  --sh: rgba(192,82,111,0.15);
+  --nav-h: 68px;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{height:100%;overflow:hidden;}
+body{
+  background:var(--cream);
+  font-family:'Noto Serif TC',serif;
+  color:var(--dark);
+  display:flex;flex-direction:column;
+}
+
+/* ── BG ── */
+body::before{
+  content:'';position:fixed;inset:0;
+  background-image:
+    radial-gradient(ellipse at 15% 15%,rgba(247,202,208,.45) 0%,transparent 55%),
+    radial-gradient(ellipse at 85% 80%,rgba(212,168,83,.12) 0%,transparent 55%);
+  pointer-events:none;z-index:0;
+}
+
+/* ── PAGES ── */
+.app{flex:1;overflow:hidden;position:relative;z-index:1;}
+.page{
+  position:absolute;inset:0;overflow-y:auto;
+  padding:28px 18px calc(var(--nav-h) + 20px);
+  display:none;
+  scrollbar-width:thin;scrollbar-color:var(--blush) transparent;
+}
+.page::-webkit-scrollbar{width:4px;}
+.page::-webkit-scrollbar-thumb{background:var(--blush);border-radius:2px;}
+.page.active{display:block;animation:pageIn .3s ease;}
+@keyframes pageIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+
+/* ── PAGE HEADER ── */
+.page-header{text-align:center;margin-bottom:28px;padding-top:8px;}
+.page-header .eyebrow{font-size:.7rem;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;}
+.page-header h2{font-family:'Playfair Display',serif;font-size:2rem;font-weight:700;color:var(--dr);line-height:1.2;}
+.page-header h2 em{font-style:italic;color:var(--rose);}
+.page-header p{font-size:.83rem;color:var(--muted);font-style:italic;margin-top:8px;line-height:1.6;}
+.hdivider{display:flex;align-items:center;gap:10px;margin:12px auto;width:160px;}
+.hdivider::before,.hdivider::after{content:'';flex:1;height:1px;background:linear-gradient(to right,transparent,var(--gold));}
+.hdivider::after{background:linear-gradient(to left,transparent,var(--gold));}
+.hdivider span{color:var(--gold);font-size:.9rem;}
+
+/* ── CARD ── */
+.card{
+  background:#fff;border-radius:22px;padding:26px;margin-bottom:18px;
+  box-shadow:0 4px 32px var(--sh),0 1px 0 rgba(212,168,83,.25) inset;
+  border:1px solid rgba(247,202,208,.5);
+}
+.card-t{
+  font-family:'Playfair Display',serif;font-size:1rem;color:var(--dr);
+  margin-bottom:14px;display:flex;align-items:center;gap:9px;
+}
+.card-t::after{content:'';flex:1;height:1px;background:linear-gradient(to right,var(--blush),transparent);}
+
+/* ── INPUTS ── */
+input[type=text],textarea{
+  width:100%;padding:13px 17px;
+  border:1.5px solid var(--blush);border-radius:50px;
+  font-family:'Noto Serif TC',serif;font-size:.87rem;
+  color:var(--dark);background:var(--cream);outline:none;
+  transition:border-color .3s,box-shadow .3s;
+}
+textarea{border-radius:14px;resize:none;}
+input[type=text]:focus,textarea:focus{border-color:var(--rose);box-shadow:0 0 0 3px rgba(232,128,154,.15);}
+input[type=text]::placeholder,textarea::placeholder{color:#c4a0ac;}
+.irow{display:flex;gap:10px;}
+
+/* ── BUTTONS ── */
+.btn{
+  padding:12px 20px;border:none;border-radius:50px;cursor:pointer;
+  font-family:'Noto Serif TC',serif;font-size:.84rem;font-weight:600;
+  transition:transform .2s,box-shadow .2s;white-space:nowrap;
+}
+.btn:hover{transform:translateY(-2px);}
+.btn:active{transform:translateY(0);}
+.btn-rose{background:linear-gradient(135deg,var(--rose),var(--dr));color:#fff;box-shadow:0 4px 14px rgba(192,82,111,.35);}
+.btn-purple{background:linear-gradient(135deg,#b49de0,var(--purple));color:#fff;box-shadow:0 4px 14px rgba(155,126,200,.35);}
+.btn-teal{background:linear-gradient(135deg,#7ecfd4,var(--teal));color:#fff;box-shadow:0 4px 14px rgba(90,172,176,.35);}
+.btn-gold{background:linear-gradient(135deg,#f0c96b,var(--gold));color:#fff;box-shadow:0 4px 14px rgba(212,168,83,.35);}
+.btn-ghost{background:transparent;border:1.5px solid var(--blush);color:var(--muted);}
+.btn-ghost:hover{border-color:var(--rose);color:var(--rose);}
+.btn-block{width:100%;padding:15px;font-size:.92rem;}
+
+/* ── MEMORY LIST ── */
+.mem-list{list-style:none;max-height:250px;overflow-y:auto;padding-right:3px;}
+.mem-list::-webkit-scrollbar{width:3px;}
+.mem-list::-webkit-scrollbar-thumb{background:var(--blush);border-radius:2px;}
+.mem-item{
+  display:flex;align-items:flex-start;gap:9px;
+  padding:10px 13px;border-radius:11px;margin-bottom:7px;
+  background:var(--cream);border:1px solid rgba(247,202,208,.6);
+  animation:sIn .3s ease both;transition:background .2s;
+}
+.mem-item:hover{background:#fef0f3;}
+.mem-icon{font-size:.88rem;margin-top:1px;flex-shrink:0;}
+.mem-text{flex:1;font-size:.86rem;line-height:1.6;color:var(--dark);}
+.btn-del{
+  background:none;border:none;color:#d4a0b0;cursor:pointer;
+  font-size:.72rem;padding:2px 5px;border-radius:6px;
+  transition:color .2s,background .2s;flex-shrink:0;
+}
+.btn-del:hover{color:var(--dr);background:rgba(192,82,111,.1);}
+.count-badge{
+  display:inline-flex;align-items:center;gap:5px;
+  background:linear-gradient(135deg,var(--blush),#f7e0e8);
+  color:var(--dr);font-size:.76rem;padding:4px 11px;border-radius:50px;
+  margin-bottom:13px;border:1px solid rgba(232,128,154,.3);
+}
+.empty{text-align:center;padding:22px 0;color:var(--muted);font-size:.84rem;font-style:italic;}
+
+/* ── EMERGENCY ── */
+.emg-box{
+  display:none;margin-top:16px;padding:24px;
+  background:linear-gradient(135deg,#fef0f3,#fff5e6);
+  border-radius:18px;border:1.5px solid var(--blush);text-align:center;
+}
+.emg-icon{font-size:1.7rem;margin-bottom:8px;}
+.emg-prompt{font-size:.78rem;color:var(--muted);margin-bottom:10px;letter-spacing:.05em;}
+.emg-quote{font-family:'Playfair Display',serif;font-size:1.05rem;font-style:italic;color:var(--dr);line-height:1.7;margin-bottom:10px;}
+.emg-foot{font-size:.74rem;color:var(--muted);}
+
+/* ── LETTER ── */
+.letter-box{
+  background:linear-gradient(135deg,#fef0f8,#fff8ee);
+  border-radius:14px;padding:18px;border:1px dashed var(--blush);
+  min-height:85px;display:flex;align-items:center;justify-content:center;
+  font-family:'Playfair Display',serif;font-size:.97rem;font-style:italic;
+  color:var(--dr);line-height:1.85;text-align:center;
+}
+.letter-acts{display:none;gap:9px;margin-top:11px;flex-wrap:wrap;}
+.letter-acts.show{display:flex;}
+
+/* ── CHALLENGE ── */
+.ch-inner{
+  background:linear-gradient(135deg,#eef8f4,#f8fbee);
+  border-radius:14px;padding:20px;text-align:center;
+  border:1px solid rgba(90,158,124,.25);min-height:75px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+}
+.ch-tag{
+  display:inline-block;font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--green);background:rgba(90,158,124,.12);
+  padding:3px 9px;border-radius:50px;margin-bottom:9px;
+}
+.ch-text{font-family:'Playfair Display',serif;font-size:1rem;color:var(--dark);line-height:1.6;}
+.ch-acts{display:flex;gap:9px;margin-top:13px;}
+
+/* ── MOOD ── */
+.mood-sec{margin-bottom:18px;}
+.mood-lbl{font-size:.8rem;color:var(--muted);margin-bottom:7px;}
+.mood-name{font-weight:600;color:var(--dark);}
+input[type=range]{
+  -webkit-appearance:none;appearance:none;
+  width:100%;height:8px;border-radius:50px;
+  background:linear-gradient(to right,#f7cad0,var(--rose),var(--dr));
+  outline:none;cursor:pointer;border:none;
+}
+input[type=range]::-webkit-slider-thumb{
+  -webkit-appearance:none;width:21px;height:21px;border-radius:50%;
+  background:#fff;border:3px solid var(--rose);
+  box-shadow:0 2px 8px var(--sh);cursor:pointer;transition:transform .15s;
+}
+input[type=range]::-webkit-slider-thumb:active{transform:scale(1.2);}
+.mood-emojis{display:flex;justify-content:space-between;font-size:1rem;margin-top:5px;padding:0 2px;}
+.mood-result{
+  display:none;margin-top:14px;padding:14px 15px;
+  background:var(--cream);border-radius:11px;
+  font-size:.84rem;line-height:1.8;color:var(--muted);
+}
+.mood-result.show{display:block;animation:sIn .3s ease;}
+.mgap{font-size:1rem;font-weight:700;}
+.mgap.warm{color:var(--green);}
+.mgap.cool{color:var(--rose);}
+
+/* ── TRUTH ── */
+.truth-disp{
+  background:linear-gradient(135deg,#f3eeff,#ffe8f4);
+  border-radius:16px;padding:26px 22px;text-align:center;
+  border:1px solid rgba(155,126,200,.3);min-height:115px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  position:relative;overflow:hidden;
+}
+.truth-disp::before{
+  content:'♦';position:absolute;top:-14px;right:-8px;
+  font-size:5rem;color:rgba(155,126,200,.06);pointer-events:none;
+}
+.truth-lv{font-size:.66rem;letter-spacing:.14em;text-transform:uppercase;color:var(--purple);margin-bottom:9px;opacity:.8;}
+.truth-q{font-family:'Playfair Display',serif;font-size:1.05rem;color:var(--dark);line-height:1.65;}
+.truth-btns{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap;justify-content:center;}
+
+/* ── BOTTOM NAV ── */
+.nav{
+  position:fixed;bottom:0;left:0;right:0;height:var(--nav-h);
+  background:rgba(255,255,255,.95);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  border-top:1px solid rgba(247,202,208,.7);
+  display:flex;align-items:stretch;z-index:100;
+  box-shadow:0 -4px 20px rgba(192,82,111,.08);
+}
+.nav-btn{
+  flex:1;display:flex;flex-direction:column;align-items:center;
+  justify-content:center;gap:3px;border:none;background:transparent;
+  cursor:pointer;padding:6px 4px;
+  transition:background .2s;border-radius:0;
+  position:relative;
+}
+.nav-btn::after{
+  content:'';position:absolute;bottom:0;left:20%;right:20%;
+  height:2.5px;border-radius:2px 2px 0 0;
+  background:var(--rose);transform:scaleX(0);
+  transition:transform .25s cubic-bezier(.34,1.56,.64,1);
+}
+.nav-btn.active::after{transform:scaleX(1);}
+.nav-btn .icon{font-size:1.25rem;transition:transform .2s;}
+.nav-btn.active .icon{transform:scale(1.15);}
+.nav-btn .label{font-size:.6rem;color:var(--muted);letter-spacing:.02em;transition:color .2s;}
+.nav-btn.active .label{color:var(--dr);font-weight:600;}
+
+/* ── SPINNER ── */
+.spin{
+  width:20px;height:20px;border-radius:50%;
+  border:2px solid var(--blush);border-top-color:var(--rose);
+  animation:rot .7s linear infinite;display:inline-block;
+}
+@keyframes rot{to{transform:rotate(360deg);}}
+
+/* ── TOAST ── */
+.toast{
+  position:fixed;bottom:calc(var(--nav-h) + 14px);left:50%;
+  transform:translateX(-50%) translateY(60px);
+  background:var(--dr);color:#fff;padding:11px 22px;border-radius:50px;
+  font-size:.83rem;box-shadow:0 4px 18px rgba(192,82,111,.4);
+  transition:transform .4s cubic-bezier(.34,1.56,.64,1),opacity .3s;
+  opacity:0;z-index:200;
+}
+.toast.show{transform:translateX(-50%) translateY(0);opacity:1;}
+
+/* ── ANIMATIONS ── */
+@keyframes sIn{from{opacity:0;transform:translateX(-8px);}to{opacity:1;transform:translateX(0);}}
+@keyframes hb{0%{transform:scale(.95);opacity:0;}50%{transform:scale(1.02);}100%{transform:scale(1);opacity:1;}}
+@keyframes flip{0%{transform:rotateY(90deg);opacity:0;}100%{transform:rotateY(0);opacity:1;}}
+
+/* ── HOME PAGE specific ── */
+.home-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px;}
+.home-tile{
+  background:#fff;border-radius:18px;padding:20px 16px;text-align:center;
+  box-shadow:0 3px 20px var(--sh);border:1px solid rgba(247,202,208,.5);
+  cursor:pointer;transition:transform .2s,box-shadow .2s;
+}
+.home-tile:hover{transform:translateY(-3px);box-shadow:0 6px 24px var(--sh);}
+.home-tile .tile-icon{font-size:1.8rem;margin-bottom:7px;}
+.home-tile .tile-label{font-size:.78rem;color:var(--dr);font-weight:600;line-height:1.4;}
+.home-tile .tile-sub{font-size:.68rem;color:var(--muted);margin-top:3px;}
+.love-quote{
+  background:linear-gradient(135deg,#fef0f3,#fff5e6);
+  border-radius:16px;padding:22px;text-align:center;
+  border:1px solid rgba(247,202,208,.6);
+  font-family:'Playfair Display',serif;font-size:.95rem;
+  font-style:italic;color:var(--dr);line-height:1.8;
+}
+.love-quote small{display:block;margin-top:8px;font-family:'Noto Serif TC',serif;font-size:.72rem;color:var(--muted);font-style:normal;letter-spacing:.08em;}
+</style>
+</head>
+<body>
+
+<div class="app">
+
+  <!-- ① HOME -->
+  <div class="page active" id="p-home">
+    <div class="page-header">
+      <div class="eyebrow">✦ Our Little Universe ✦</div>
+      <h2>我們的<em>小宇宙</em></h2>
+      <div class="hdivider"><span>❦</span></div>
+      <p>每一天都是讓感情升溫的機會。</p>
+    </div>
+
+    <div class="love-quote" id="homeQuote">
+      <span class="spin"></span>
+    </div>
+
+    <div style="margin-top:20px;margin-bottom:8px;">
+      <div style="font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);text-align:center;margin-bottom:14px;">— 今天想做什麼？—</div>
+      <div class="home-grid">
+        <div class="home-tile" onclick="goTo('p-memory')">
+          <div class="tile-icon">📖</div>
+          <div class="tile-label">回憶存摺</div>
+          <div class="tile-sub">儲存美好瞬間</div>
+        </div>
+        <div class="home-tile" onclick="goTo('p-letter')">
+          <div class="tile-icon">💌</div>
+          <div class="tile-label">每日情書</div>
+          <div class="tile-sub">AI 幫你說出口</div>
+        </div>
+        <div class="home-tile" onclick="goTo('p-date')">
+          <div class="tile-icon">🎯</div>
+          <div class="tile-label">約會任務</div>
+          <div class="tile-sub">本週挑戰抽取</div>
+        </div>
+        <div class="home-tile" onclick="goTo('p-mood')">
+          <div class="tile-icon">🌡️</div>
+          <div class="tile-label">感情溫度計</div>
+          <div class="tile-sub">看看你們同頻嗎</div>
+        </div>
+      </div>
+      <div class="home-tile" style="margin-bottom:12px;" onclick="goTo('p-truth')">
+        <div class="tile-icon">🃏</div>
+        <div class="tile-label">真心話大冒險</div>
+        <div class="tile-sub">AI 生成專屬深度問題，開啟今晚的對話</div>
+      </div>
+      <div class="home-tile" onclick="goTo('p-emergency')">
+        <div class="tile-icon">🆘</div>
+        <div class="tile-label">緊急喚回裝置</div>
+        <div class="tile-sub">快撐不住時，按這裡</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ② MEMORY -->
+  <div class="page" id="p-memory">
+    <div class="page-header">
+      <div class="eyebrow">Memory Book</div>
+      <h2>回憶<em>存摺</em></h2>
+      <p>把每個美好瞬間鎖進這裡。</p>
+    </div>
+    <div class="card">
+      <div class="card-t">📝 存入新回憶</div>
+      <div class="irow">
+        <input type="text" id="newMem" placeholder="那天一起淋雨卻很開心…" />
+        <button class="btn btn-rose" onclick="saveMem()">鎖入</button>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-t">💌 我們的清單</div>
+      <div class="count-badge"><span>💗</span><span id="countTxt">讀取中…</span></div>
+      <ul class="mem-list" id="memList"><li class="empty">讀取中…</li></ul>
+    </div>
+  </div>
+
+  <!-- ③ LETTER -->
+  <div class="page" id="p-letter">
+    <div class="page-header">
+      <div class="eyebrow">Daily Love Letter</div>
+      <h2>每日<em>情書</em></h2>
+      <p>讓 AI 幫你找到最美的表達方式。</p>
+    </div>
+    <div class="card">
+      <div class="card-t">💛 今天的心情是…</div>
+      <input type="text" id="letterMood" placeholder="例如：有點想你、好開心、有些委屈…" style="margin-bottom:12px;" />
+      <button class="btn btn-gold btn-block" onclick="genLetter()" style="margin-bottom:16px;">✨ 生成今日情書</button>
+      <div class="letter-box" id="letterBox">
+        <span style="color:var(--muted);font-style:italic;font-size:.83rem;font-family:'Noto Serif TC',serif;">輸入心情，AI 會幫你生成一封溫柔的情書 💌</span>
+      </div>
+      <div class="letter-acts" id="letterActs">
+        <button class="btn btn-ghost" onclick="copyLetter()" style="flex:1;">📋 複製傳給 TA</button>
+        <button class="btn btn-gold" onclick="genLetter()" style="flex:1;">🔄 再生成</button>
+      </div>
+    </div>
+    <div class="card" style="background:linear-gradient(135deg,#fffbf0,#fff5f8);">
+      <div class="card-t">💡 情書靈感</div>
+      <div style="display:flex;flex-wrap:wrap;gap:7px;" id="moodChips"></div>
+    </div>
+  </div>
+
+  <!-- ④ DATE CHALLENGE -->
+  <div class="page" id="p-date">
+    <div class="page-header">
+      <div class="eyebrow">Date Challenge</div>
+      <h2>約會<em>任務</em></h2>
+      <p>完成挑戰，一起創造新回憶。</p>
+    </div>
+    <div class="card">
+      <div class="card-t">🎯 本週挑戰</div>
+      <div class="ch-inner" id="chCard">
+        <div style="color:var(--muted);font-size:.84rem;font-style:italic;">點下方抽出你們的約會任務 🎲</div>
+      </div>
+      <div class="ch-acts">
+        <button class="btn btn-teal" style="flex:1;" onclick="drawCh()">🎲 抽取任務</button>
+        <button class="btn btn-ghost" id="doneCh" style="flex:1;display:none;" onclick="completeCh()">✅ 完成了！</button>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-t">🗂️ 任務分類</div>
+      <div style="display:flex;flex-wrap:wrap;gap:7px;" id="catChips">
+        <button class="btn btn-ghost" style="font-size:.75rem;padding:7px 13px;" onclick="drawChCat('室內')">🏠 室內</button>
+        <button class="btn btn-ghost" style="font-size:.75rem;padding:7px 13px;" onclick="drawChCat('戶外')">🌿 戶外</button>
+        <button class="btn btn-ghost" style="font-size:.75rem;padding:7px 13px;" onclick="drawChCat('深夜')">🌙 深夜</button>
+        <button class="btn btn-ghost" style="font-size:.75rem;padding:7px 13px;" onclick="drawChCat('創意')">🎨 創意</button>
+        <button class="btn btn-ghost" style="font-size:.75rem;padding:7px 13px;" onclick="drawChCat('溫柔')">🌸 溫柔</button>
+        <button class="btn btn-ghost" style="font-size:.75rem;padding:7px 13px;" onclick="drawChCat('冒險')">🗺️ 冒險</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ⑤ MOOD -->
+  <div class="page" id="p-mood">
+    <div class="page-header">
+      <div class="eyebrow">Mood Thermometer</div>
+      <h2>感情<em>溫度計</em></h2>
+      <p>兩人各自記錄今天的感情溫度。</p>
+    </div>
+    <div class="card">
+      <div class="card-t">📊 今日溫度</div>
+      <div class="mood-sec">
+        <div class="mood-lbl">我的溫度：<span class="mood-name" id="mA-lbl">5 — 平靜如常</span></div>
+        <input type="range" min="1" max="10" value="5" id="mA" oninput="updMood('mA')">
+        <div class="mood-emojis"><span>😔</span><span>😐</span><span>🙂</span><span>😊</span><span>🥰</span></div>
+      </div>
+      <div class="mood-sec">
+        <div class="mood-lbl">TA 的溫度：<span class="mood-name" id="mB-lbl">5 — 平靜如常</span></div>
+        <input type="range" min="1" max="10" value="5" id="mB" oninput="updMood('mB')">
+        <div class="mood-emojis"><span>😔</span><span>😐</span><span>🙂</span><span>😊</span><span>🥰</span></div>
+      </div>
+      <button class="btn btn-purple btn-block" onclick="cmpMood()">💞 分析我們的溫差</button>
+      <div class="mood-result" id="moodRes"></div>
+    </div>
+    <div class="card">
+      <div class="card-t">📅 溫度歷史</div>
+      <div id="moodHistory" style="font-size:.82rem;color:var(--muted);">
+        <div class="empty" style="padding:16px 0;">還沒有記錄，先記一筆今天的吧！</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ⑥ TRUTH -->
+  <div class="page" id="p-truth">
+    <div class="page-header">
+      <div class="eyebrow">Truth or Talk</div>
+      <h2>真心話<em>大冒險</em></h2>
+      <p>AI 為你們生成專屬深度問題。</p>
+    </div>
+    <div class="card">
+      <div class="card-t">🃏 抽一張牌</div>
+      <div class="truth-disp" id="truthDisp">
+        <div style="color:var(--muted);font-size:.87rem;font-style:italic;">選擇難度，開啟今晚的對話 💬</div>
+      </div>
+      <div class="truth-btns">
+        <button class="btn btn-purple" onclick="drawTruth('輕鬆')">🌸 輕鬆</button>
+        <button class="btn btn-purple" onclick="drawTruth('深度')">💬 深度</button>
+        <button class="btn btn-purple" onclick="drawTruth('挑戰')">🔥 挑戰</button>
+      </div>
+    </div>
+    <div class="card" style="background:linear-gradient(135deg,#f3eeff,#ffe8f4);border:1px solid rgba(155,126,200,.25);">
+      <div class="card-t" style="color:var(--purple);">💡 玩法說明</div>
+      <div style="font-size:.83rem;color:var(--muted);line-height:1.8;">
+        <div>🌸 <strong>輕鬆級</strong> — 溫馨有趣，適合隨時玩</div>
+        <div>💬 <strong>深度級</strong> — 關於夢想、恐懼、人生觀</div>
+        <div>🔥 <strong>挑戰級</strong> — 關係邊界、過去的傷、期待</div>
+        <div style="margin-top:8px;font-style:italic;">兩人輪流回答，不能只說「不知道」😄</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ⑦ EMERGENCY -->
+  <div class="page" id="p-emergency">
+    <div class="page-header">
+      <div class="eyebrow">Emergency Love Recall</div>
+      <h2><em>緊急</em>喚回裝置</h2>
+      <p>當你快撐不住的時候，來這裡。</p>
+    </div>
+    <div class="card">
+      <p style="font-size:.84rem;color:var(--muted);margin-bottom:18px;line-height:1.8;text-align:center;">
+        感情有時候會讓人很累。<br>但在放棄之前，先讓一段回憶提醒你——<br><em style="color:var(--dr);">我們曾經有多好。</em>
+      </p>
+      <button class="btn btn-rose btn-block" onclick="triggerEmg()">💞 給我一個繼續愛的理由</button>
+      <div class="emg-box" id="emgBox">
+        <div class="emg-icon">✨</div>
+        <div class="emg-prompt">別放棄，記得這個嗎？</div>
+        <div class="emg-quote" id="emgQuote"></div>
+        <div class="emg-foot">這份愛值得我們再試著溝通一次。</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-t">📝 今天想說什麼</div>
+      <textarea id="ventText" rows="4" placeholder="有時候只是需要說出來。這裡只有你一個人，盡情寫吧…"></textarea>
+      <button class="btn btn-ghost btn-block" style="margin-top:10px;" onclick="saveVent()">存入內心話 🔒</button>
+    </div>
+  </div>
+
+</div><!-- /app -->
+
+<!-- Bottom Nav -->
+<nav class="nav">
+  <button class="nav-btn active" data-page="p-home" onclick="goTo('p-home',this)">
+    <span class="icon">🏠</span><span class="label">首頁</span>
+  </button>
+  <button class="nav-btn" data-page="p-memory" onclick="goTo('p-memory',this)">
+    <span class="icon">📖</span><span class="label">回憶</span>
+  </button>
+  <button class="nav-btn" data-page="p-letter" onclick="goTo('p-letter',this)">
+    <span class="icon">💌</span><span class="label">情書</span>
+  </button>
+  <button class="nav-btn" data-page="p-mood" onclick="goTo('p-mood',this)">
+    <span class="icon">🌡️</span><span class="label">溫度</span>
+  </button>
+  <button class="nav-btn" data-page="p-truth" onclick="goTo('p-truth',this)">
+    <span class="icon">🃏</span><span class="label">真心話</span>
+  </button>
+</nav>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ══════════════════════════════
+   NAVIGATION
+══════════════════════════════ */
+function goTo(pid, btn) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById(pid).classList.add('active');
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  const target = btn || document.querySelector(`[data-page="${pid}"]`);
+  if (target) target.classList.add('active');
+  // scroll to top
+  document.getElementById(pid).scrollTop = 0;
+}
+
+/* ══════════════════════════════
+   STORAGE
+══════════════════════════════ */
+let memories = [];
+let moodLog = [];
+
+async function load() {
+  try {
+    const r = await window.storage.get('memories');
+    memories = r ? JSON.parse(r.value) : [];
+  } catch { memories = []; }
+  try {
+    const r = await window.storage.get('moodlog');
+    moodLog = r ? JSON.parse(r.value) : [];
+  } catch { moodLog = []; }
+  renderMems();
+  renderMoodHistory();
+  loadHomeQuote();
+}
+async function saveMems() {
+  try { await window.storage.set('memories', JSON.stringify(memories)); } catch {}
+}
+async function saveMoodLog() {
+  try { await window.storage.set('moodlog', JSON.stringify(moodLog)); } catch {}
+}
+
+/* ══════════════════════════════
+   HOME QUOTE
+══════════════════════════════ */
+const QUOTES = [
+  { text:'愛不是尋找一個完美的人，而是學會用完美的眼光欣賞那個不完美的人。', attr:'—— 薩姆·基恩' },
+  { text:'真正的愛情，不是轟轟烈烈的誓言，而是每天早上醒來仍然選擇對方。', attr:'—— 無名' },
+  { text:'我愛你，不是因為你是誰，而是因為和你在一起時，我成為了更好的自己。', attr:'—— 羅伊·克羅夫特' },
+  { text:'你是我在這個混亂世界裡，最安靜的地方。', attr:'—— 無名' },
+  { text:'感情需要的不是完美，而是兩個不完美的人，願意為彼此努力。', attr:'—— 無名' },
+];
+function loadHomeQuote() {
+  const q = QUOTES[Math.floor(Math.random() * QUOTES.length)];
+  document.getElementById('homeQuote').innerHTML =
+    `<div>${q.text}<small>${q.attr}</small></div>`;
+}
+
+/* ══════════════════════════════
+   MEMORY
+══════════════════════════════ */
+const MIC = ['🌸','💌','🌙','☁️','✨','🌷','🍃','💫','🎵','🌊'];
+function esc(s){ return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+function renderMems() {
+  const list = document.getElementById('memList');
+  const ct = document.getElementById('countTxt');
+  ct.textContent = memories.length ? `已存入 ${memories.length} 段回憶` : '還沒有回憶';
+  if (!memories.length) {
+    list.innerHTML = '<li class="empty">還沒有回憶喔，把第一個美好瞬間存進來吧 💕</li>';
+    return;
+  }
+  list.innerHTML = memories.map((m,i)=>`
+    <li class="mem-item">
+      <span class="mem-icon">${MIC[i%MIC.length]}</span>
+      <span class="mem-text">${esc(m)}</span>
+      <button class="btn-del" onclick="delMem(${i})">✕</button>
+    </li>`).join('');
+}
+async function saveMem() {
+  const inp = document.getElementById('newMem');
+  const t = inp.value.trim();
+  if (!t) { toast('請先輸入一段回憶！'); return; }
+  memories.push(t); await saveMems(); inp.value = '';
+  renderMems(); toast('回憶已鎖進保險箱 🔒💗');
+}
+async function delMem(i) {
+  if (!confirm('確定要刪除這段回憶嗎？')) return;
+  memories.splice(i,1); await saveMems(); renderMems();
+  toast('已輕輕放下這段記憶。');
+}
+
+/* ══════════════════════════════
+   EMERGENCY
+══════════════════════════════ */
+const DEF_MEMS = ['第一次見面時你的笑容。','一起克服困難後擁抱的溫度。','那些雖然平凡但有你陪伴的晚餐。'];
+function triggerEmg() {
+  const pool = memories.length ? memories : DEF_MEMS;
+  const c = pool[Math.floor(Math.random()*pool.length)];
+  const box = document.getElementById('emgBox');
+  document.getElementById('emgQuote').textContent = `「${c}」`;
+  box.style.display = 'block';
+  box.style.animation = 'none';
+  requestAnimationFrame(()=>{ box.style.animation = 'hb .5s ease'; });
+  if (navigator.vibrate) navigator.vibrate([100,50,100]);
+}
+async function saveVent() {
+  const t = document.getElementById('ventText').value.trim();
+  if (!t) { toast('寫點什麼吧…'); return; }
+  memories.push('💭 內心話：' + t.slice(0,40) + (t.length>40?'…':''));
+  await saveMems(); document.getElementById('ventText').value = '';
+  renderMems(); toast('內心話已安全鎖起來 🔒');
+}
+
+/* ══════════════════════════════
+   LETTER  (Claude API)
+══════════════════════════════ */
+let lastLetter = '';
+const MOOD_CHIPS = ['有點想你','好開心','有些委屈','覺得很累','超幸福','有點吃醋','特別感謝你','想道歉'];
+
+function initMoodChips() {
+  const el = document.getElementById('moodChips');
+  el.innerHTML = MOOD_CHIPS.map(m=>`
+    <button class="btn btn-ghost" style="font-size:.75rem;padding:6px 13px;" onclick="useMoodChip('${m}')">${m}</button>
+  `).join('');
+}
+function useMoodChip(mood) {
+  document.getElementById('letterMood').value = mood;
+  genLetter();
+}
+async function genLetter() {
+  const mood = document.getElementById('letterMood').value.trim() || '想念對方';
+  const box = document.getElementById('letterBox');
+  const acts = document.getElementById('letterActs');
+  box.innerHTML = '<span class="spin"></span>';
+  acts.classList.remove('show');
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({
+        model:'claude-sonnet-4-20250514', max_tokens:1000,
+        messages:[{role:'user',content:
+          `你是幫情侶表達心意的文字魔法師。請用溫柔、真誠、略帶詩意的繁體中文，根據以下心情生成一段 55~80 字的情書短語，讓對方一讀就心動。不加任何前言說明，直接輸出情書內容。\n\n今天的心情：${mood}`
+        }]
+      })
+    });
+    const data = await res.json();
+    lastLetter = (data.content||[]).map(b=>b.text||'').join('').trim();
+    box.innerHTML = `<span style="font-family:'Playfair Display',serif;font-size:.97rem;font-style:italic;color:var(--dr);line-height:1.85;">${esc(lastLetter)}</span>`;
+    acts.classList.add('show');
+  } catch {
+    box.innerHTML = '<span style="color:var(--muted);font-size:.83rem;">生成失敗，請再試一次 🌸</span>';
+  }
+}
+function copyLetter() {
+  if (!lastLetter) return;
+  navigator.clipboard.writeText(lastLetter).then(()=>toast('情書已複製，快去傳給 TA 💌'));
+}
+
+/* ══════════════════════════════
+   DATE CHALLENGE
+══════════════════════════════ */
+const CHS = [
+  {tag:'室內', text:'今晚一起做一道你們從沒嘗試過的料理，不論成功或失敗都記錄下來。'},
+  {tag:'戶外', text:'明天傍晚，去一個從沒去過的公園或街道，只是走走，不看手機。'},
+  {tag:'深夜', text:'今晚關燈，各自分享一個從未對對方說過的小秘密。'},
+  {tag:'創意', text:'用手機幫對方拍一張「只有你才看得出美的」照片，並告訴 TA 你為什麼拍它。'},
+  {tag:'溫柔', text:'寫一張手寫紙條，列出三件今天你最感謝對方的事，放在 TA 能發現的地方。'},
+  {tag:'冒險', text:'隨機搜尋一個你們都沒去過的地方，下週一起去，不攻略、不查評分。'},
+  {tag:'回憶', text:'翻出一張一年前的舊照片，跟對方說說當時你沒說出口的感受。'},
+  {tag:'儀式', text:'今天睡前，互相說出一句「今天你做了什麼讓我很喜歡你」。'},
+  {tag:'擁抱', text:'給對方一個超過十秒的擁抱，什麼都不說，只是抱著。'},
+  {tag:'學習', text:'一起看一部你們興趣不同方向的電影，看完後分享各自的感受。'},
+  {tag:'室內', text:'一起玩一個從沒試過的桌遊或手遊，輸的人要幫贏的人做一件事。'},
+  {tag:'戶外', text:'帶便利商店的零食去一個有星星的地方坐著，不計畫、不打卡。'},
+];
+let curCh = null;
+
+function drawCh(filter) {
+  const pool = filter ? CHS.filter(c=>c.tag===filter) : CHS;
+  curCh = pool[Math.floor(Math.random()*pool.length)];
+  const card = document.getElementById('chCard');
+  card.innerHTML = `<div class="ch-tag">🎯 ${curCh.tag}挑戰</div><div class="ch-text">${curCh.text}</div>`;
+  card.style.animation='none';
+  requestAnimationFrame(()=>{ card.style.animation='flip .4s ease'; });
+  document.getElementById('doneCh').style.display='block';
+}
+function drawChCat(cat){ drawCh(cat); goTo('p-date', document.querySelector('[data-page="p-date"]')); }
+async function completeCh() {
+  if (!curCh) return;
+  memories.push(`完成約會挑戰（${curCh.tag}）：${curCh.text.slice(0,28)}…`);
+  await saveMems(); renderMems();
+  document.getElementById('doneCh').style.display='none';
+  toast('任務達成！已存入回憶 🎉');
+}
+
+/* ══════════════════════════════
+   MOOD
+══════════════════════════════ */
+const MMAP = {1:'1 — 很低落',2:'2 — 有點悶',3:'3 — 不太好',4:'4 — 一般般',
+  5:'5 — 平靜如常',6:'6 — 還不錯',7:'7 — 心情好',8:'8 — 蠻快樂的',
+  9:'9 — 超級開心',10:'10 — 幸福滿溢'};
+function updMood(id) {
+  document.getElementById(id+'-lbl').textContent = MMAP[document.getElementById(id).value];
+}
+async function cmpMood() {
+  const a = +document.getElementById('mA').value;
+  const b = +document.getElementById('mB').value;
+  const diff = Math.abs(a-b);
+  let icon, msg;
+  if (diff===0){ icon='💞'; msg='你們今天完全同頻！這是心靈相通的一天，好好珍惜這種默契。'; }
+  else if (diff<=2){ icon='🌸'; msg=`溫差只有 <span class="mgap warm">${diff} 度</span>，彼此很靠近。稍微問問對方今天過得怎麼樣吧。`; }
+  else if (diff<=4){ icon='🌤️'; msg=`溫差有 <span class="mgap cool">${diff} 度</span>，有一點距離感。今晚多陪伴對方，聊聊彼此的心情。`; }
+  else { icon='🌧️'; msg=`溫差達到 <span class="mgap cool">${diff} 度</span>，差距比較大。記得給對方一個擁抱，告訴 TA 你在 ❤️`; }
+  const res = document.getElementById('moodRes');
+  res.innerHTML=`<div style="font-size:1.4rem;margin-bottom:7px;">${icon}</div>
+    <div>我：<strong>${MMAP[a]}</strong>　TA：<strong>${MMAP[b]}</strong></div>
+    <div style="margin-top:7px;">${msg}</div>`;
+  res.classList.add('show');
+  // log
+  const today = new Date().toLocaleDateString('zh-TW');
+  moodLog.unshift({ date:today, me:a, ta:b });
+  if (moodLog.length>10) moodLog.length=10;
+  await saveMoodLog(); renderMoodHistory();
+  toast('已記錄今日溫度 📊');
+}
+function renderMoodHistory() {
+  const el = document.getElementById('moodHistory');
+  if (!moodLog.length){ el.innerHTML='<div class="empty" style="padding:12px 0;">還沒有記錄，先記一筆今天的吧！</div>'; return; }
+  el.innerHTML = moodLog.map(r=>
+    `<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(247,202,208,.4);font-size:.8rem;">
+      <span style="color:var(--muted);">${r.date}</span>
+      <span>我 <strong>${r.me}</strong> 分 　TA <strong>${r.ta}</strong> 分</span>
+    </div>`).join('');
+}
+
+/* ══════════════════════════════
+   TRUTH CARD (Claude API)
+══════════════════════════════ */
+async function drawTruth(lv) {
+  const d = document.getElementById('truthDisp');
+  d.innerHTML='<span class="spin"></span>';
+  const desc={
+    '輕鬆':'輕鬆有趣、溫馨，適合隨時玩，不沉重',
+    '深度':'關於彼此夢想、恐懼、人生觀，有一定深度',
+    '挑戰':'關於關係邊界、過去的傷、期待與失望，勇敢直接'
+  };
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({
+        model:'claude-sonnet-4-20250514', max_tokens:1000,
+        messages:[{role:'user',content:
+          `你是情侶對話卡牌設計師。請生成一道適合情侶一起回答的問題，風格：${desc[lv]}。\n要求：繁體中文、25~45字、開放式、有溫度、直接輸出問題本身不需任何說明前言。`
+        }]
+      })
+    });
+    const data = await res.json();
+    const q = (data.content||[]).map(b=>b.text||'').join('').trim();
+    d.innerHTML=`<div class="truth-lv">${lv}級問題</div><div class="truth-q">${esc(q)}</div>`;
+    d.style.animation='none';
+    requestAnimationFrame(()=>{ d.style.animation='flip .4s ease'; });
+  } catch {
+    d.innerHTML='<div style="color:var(--muted);font-size:.84rem;">抽取失敗，請再試一次 🎴</div>';
+  }
+}
+
+/* ══════════════════════════════
+   TOAST
+══════════════════════════════ */
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent=msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), 2800);
+}
+
+/* ══════════════════════════════
+   INIT
+══════════════════════════════ */
+document.getElementById('newMem').addEventListener('keydown', e=>{ if(e.key==='Enter') saveMem(); });
+document.getElementById('letterMood').addEventListener('keydown', e=>{ if(e.key==='Enter') genLetter(); });
+initMoodChips();
+load();
+</script>
+</body>
+</html>

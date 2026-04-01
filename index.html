@@ -4,6 +4,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>我們的小宇宙 💕</title>
+<link rel="manifest" href="manifest.json">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="我們的小宇宙">
+<meta name="theme-color" content="#c0526f">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@300;400;600&display=swap" rel="stylesheet">
 <style>
 :root{
@@ -44,7 +49,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
 .card-t::after{content:'';flex:1;height:1px;background:linear-gradient(to right,var(--blush),transparent);}
 
 /* ── 輸入 ── */
-input[type=text],input[type=password],textarea{
+input[type=text],textarea{
   width:100%;padding:12px 16px;border:1.5px solid var(--blush);border-radius:50px;
   font-family:'Noto Serif TC',serif;font-size:.86rem;color:var(--dark);
   background:var(--cream);outline:none;transition:border-color .25s,box-shadow .25s;}
@@ -66,7 +71,6 @@ input::placeholder,textarea::placeholder{color:#c4a0ac;}
 .btn-ghost{background:transparent;border:1.5px solid var(--blush);color:var(--muted);}
 .btn-ghost:hover{border-color:var(--rose);color:var(--rose);}
 .btn-block{width:100%;padding:14px;font-size:.9rem;}
-.btn-sm{padding:8px 14px;font-size:.76rem;}
 
 /* ── 回憶清單 ── */
 .mem-list{list-style:none;max-height:240px;overflow-y:auto;padding-right:3px;}
@@ -76,20 +80,29 @@ input::placeholder,textarea::placeholder{color:#c4a0ac;}
   background:var(--cream);border:1px solid rgba(247,202,208,.6);transition:background .2s;}
 .mem-item:hover{background:#fef0f3;}
 .mem-icon{font-size:.88rem;margin-top:2px;flex-shrink:0;}
-.mem-text{flex:1;font-size:.84rem;line-height:1.6;color:var(--dark);}
-.mem-who{font-size:.65rem;color:var(--rose);margin-top:2px;}
-.btn-del{background:none;border:none;color:#d4a0b0;cursor:pointer;font-size:.7rem;padding:2px 5px;border-radius:6px;flex-shrink:0;transition:color .2s;}
+.mem-text{flex:1;font-size:.84rem;line-height:1.6;}
+.mem-who{font-size:.64rem;color:var(--rose);margin-top:2px;}
+.btn-del{background:none;border:none;color:#d4a0b0;cursor:pointer;font-size:.7rem;padding:2px 5px;border-radius:6px;flex-shrink:0;}
 .btn-del:hover{color:var(--dr);}
 .badge{display:inline-flex;align-items:center;gap:5px;background:linear-gradient(135deg,var(--blush),#f7e0e8);
   color:var(--dr);font-size:.74rem;padding:4px 11px;border-radius:50px;margin-bottom:12px;
   border:1px solid rgba(232,128,154,.3);}
 .empty{text-align:center;padding:20px 0;color:var(--muted);font-size:.83rem;}
 
+/* ── 連線狀態列 ── */
+.sync-bar{display:flex;align-items:center;gap:8px;padding:9px 14px;
+  background:linear-gradient(135deg,#f3eeff,#fef0f8);border-radius:12px;
+  margin-bottom:14px;font-size:.78rem;color:var(--purple);border:1px solid rgba(155,126,200,.2);}
+.sync-dot{width:7px;height:7px;border-radius:50%;background:var(--green);flex-shrink:0;transition:background .3s;}
+.sync-dot.off{background:#ddd;}
+.sync-dot.loading{background:var(--gold);animation:pulse .8s infinite;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:.4;}}
+
 /* ── 緊急 ── */
 .emg-box{display:none;margin-top:14px;padding:22px;background:linear-gradient(135deg,#fef0f3,#fff5e6);
   border-radius:16px;border:1.5px solid var(--blush);text-align:center;}
 .emg-icon{font-size:1.6rem;margin-bottom:8px;}
-.emg-prompt{font-size:.76rem;color:var(--muted);margin-bottom:9px;letter-spacing:.05em;}
+.emg-prompt{font-size:.76rem;color:var(--muted);margin-bottom:9px;}
 .emg-quote{font-size:1rem;color:var(--dr);line-height:1.75;margin-bottom:10px;font-weight:500;}
 .emg-foot{font-size:.72rem;color:var(--muted);}
 
@@ -99,6 +112,13 @@ input::placeholder,textarea::placeholder{color:#c4a0ac;}
   justify-content:center;font-size:.92rem;color:var(--dr);line-height:1.85;text-align:center;}
 .letter-acts{display:none;gap:9px;margin-top:11px;flex-wrap:wrap;}
 .letter-acts.show{display:flex;}
+/* 收件匣 */
+.inbox-item{background:linear-gradient(135deg,#fef0f8,#fff8ee);border-radius:14px;
+  padding:16px;margin-bottom:10px;border:1px solid rgba(247,202,208,.5);}
+.inbox-from{font-size:.7rem;color:var(--muted);margin-bottom:6px;}
+.inbox-text{font-size:.88rem;color:var(--dr);line-height:1.75;font-weight:500;}
+.inbox-time{font-size:.66rem;color:#c4a0ac;margin-top:6px;text-align:right;}
+.inbox-new{display:inline-block;width:7px;height:7px;background:var(--rose);border-radius:50%;margin-left:5px;vertical-align:middle;}
 
 /* ── 約會挑戰 ── */
 .ch-inner{background:linear-gradient(135deg,#eef8f4,#f8fbee);border-radius:14px;padding:20px;
@@ -127,18 +147,16 @@ input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;bor
 .mood-emojis span:nth-child(3){left:44.4%;}
 .mood-emojis span:nth-child(4){left:66.7%;}
 .mood-emojis span:nth-child(5){left:88.9%;}
+.partner-mood{background:linear-gradient(135deg,#f3eeff,#fef0f8);border-radius:14px;
+  padding:14px 18px;margin-top:10px;border:1px solid rgba(155,126,200,.2);}
+.partner-mood .pm-lbl{font-size:.78rem;color:var(--muted);margin-bottom:5px;}
+.partner-mood .pm-val{font-size:1rem;font-weight:600;color:var(--purple);}
 .mood-result{display:none;margin-top:14px;padding:14px 15px;background:var(--cream);
   border-radius:11px;font-size:.83rem;line-height:1.8;color:var(--muted);}
 .mood-result.show{display:block;animation:sIn .3s ease;}
 .mgap{font-size:.95rem;font-weight:700;}
 .mgap.warm{color:var(--green);}
 .mgap.cool{color:var(--rose);}
-
-/* ── 溫度計：對方欄位（只讀模式） ── */
-.partner-mood-display{background:linear-gradient(135deg,#f3eeff,#fef0f8);border-radius:14px;
-  padding:16px 18px;margin-top:12px;border:1px solid rgba(155,126,200,.2);}
-.partner-mood-display .pm-label{font-size:.78rem;color:var(--muted);margin-bottom:6px;}
-.partner-mood-display .pm-val{font-size:1rem;font-weight:600;color:var(--purple);}
 
 /* ── 真心話 ── */
 .truth-disp{background:linear-gradient(135deg,#f3eeff,#ffe8f4);border-radius:16px;padding:26px 20px;
@@ -151,36 +169,21 @@ input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;bor
 .truth-q{font-size:1.05rem;color:var(--dark);line-height:1.7;font-weight:500;}
 .truth-btns{display:flex;gap:9px;margin-top:14px;flex-wrap:wrap;justify-content:center;}
 
-/* ── 配對系統 ── */
-.pair-overlay{position:fixed;inset:0;background:var(--cream);z-index:500;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  padding:32px 24px;text-align:center;}
-.pair-logo{font-size:3.5rem;margin-bottom:16px;}
-.pair-title{font-size:1.6rem;font-weight:600;color:var(--dr);margin-bottom:8px;}
-.pair-sub{font-size:.84rem;color:var(--muted);line-height:1.7;margin-bottom:28px;}
-.pair-card{background:#fff;border-radius:20px;padding:24px;width:100%;max-width:360px;
-  box-shadow:0 4px 32px var(--sh);border:1px solid rgba(247,202,208,.5);margin-bottom:16px;}
-.pair-card-t{font-size:.82rem;font-weight:600;color:var(--dr);margin-bottom:14px;letter-spacing:.04em;}
-.code-display{font-size:2rem;font-weight:600;color:var(--dr);letter-spacing:.18em;
+/* ── 配對畫面 ── */
+.pair-overlay{position:fixed;inset:0;background:var(--cream);z-index:500;overflow-y:auto;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px 20px;}
+.pair-logo{font-size:3.5rem;margin-bottom:14px;}
+.pair-title{font-size:1.65rem;font-weight:600;color:var(--dr);margin-bottom:8px;}
+.pair-sub{font-size:.84rem;color:var(--muted);line-height:1.7;margin-bottom:28px;text-align:center;}
+.pair-card{background:#fff;border-radius:20px;padding:22px;width:100%;max-width:360px;
+  box-shadow:0 4px 32px var(--sh);border:1px solid rgba(247,202,208,.5);margin-bottom:14px;}
+.pair-card-t{font-size:.82rem;font-weight:600;color:var(--dr);margin-bottom:14px;}
+.code-display{font-size:2rem;font-weight:700;color:var(--dr);letter-spacing:.2em;
   background:var(--cream);border-radius:12px;padding:14px;margin:10px 0;
-  border:2px dashed var(--blush);cursor:pointer;transition:background .2s;}
-.code-display:hover{background:#fef0f3;}
-.code-hint{font-size:.72rem;color:var(--muted);}
-
-/* ── 共享狀態列 ── */
-.sync-bar{display:flex;align-items:center;gap:8px;padding:9px 14px;
-  background:linear-gradient(135deg,#f3eeff,#fef0f8);border-radius:12px;
-  margin-bottom:14px;font-size:.78rem;color:var(--purple);border:1px solid rgba(155,126,200,.2);}
-.sync-dot{width:7px;height:7px;border-radius:50%;background:var(--green);flex-shrink:0;}
-.sync-dot.off{background:#ddd;}
-
-/* ── 共享情書收件匣 ── */
-.inbox-item{background:linear-gradient(135deg,#fef0f8,#fff8ee);border-radius:14px;
-  padding:16px;margin-bottom:10px;border:1px solid rgba(247,202,208,.5);}
-.inbox-from{font-size:.7rem;color:var(--muted);margin-bottom:6px;}
-.inbox-text{font-size:.88rem;color:var(--dr);line-height:1.75;font-weight:500;}
-.inbox-time{font-size:.66rem;color:#c4a0ac;margin-top:6px;text-align:right;}
-.inbox-new{display:inline-block;width:8px;height:8px;background:var(--rose);border-radius:50%;margin-left:6px;vertical-align:middle;}
+  border:2px dashed var(--blush);cursor:pointer;text-align:center;}
+.code-hint{font-size:.71rem;color:var(--muted);text-align:center;}
+.pair-sep{font-size:.72rem;color:var(--muted);text-align:center;margin:4px 0 14px;
+  max-width:320px;line-height:1.6;}
 
 /* ── 底部導航 ── */
 .nav{position:fixed;bottom:0;left:0;right:0;height:var(--nav-h);
@@ -197,27 +200,27 @@ input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;bor
 .nav-btn.active .ni{transform:scale(1.15);}
 .nav-btn .nl{font-size:.58rem;color:var(--muted);transition:color .2s;}
 .nav-btn.active .nl{color:var(--dr);font-weight:600;}
-/* 未讀紅點 */
-.nav-btn .dot{position:absolute;top:6px;right:calc(50% - 16px);
-  width:7px;height:7px;background:var(--rose);border-radius:50%;display:none;}
-.nav-btn .dot.show{display:block;}
+.nav-btn .rdot{position:absolute;top:7px;right:calc(50% - 14px);width:7px;height:7px;
+  background:var(--rose);border-radius:50%;display:none;}
+.nav-btn .rdot.on{display:block;}
 
 /* ── 首頁 ── */
-.home-grid{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin-bottom:14px;}
+.home-grid{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin-bottom:12px;}
 .tile{background:#fff;border-radius:17px;padding:18px 14px;text-align:center;
   box-shadow:0 3px 18px var(--sh);border:1px solid rgba(247,202,208,.5);
   cursor:pointer;transition:transform .2s,box-shadow .2s;}
 .tile:hover{transform:translateY(-3px);box-shadow:0 6px 22px var(--sh);}
 .ti{font-size:1.7rem;margin-bottom:6px;}
 .tl{font-size:.76rem;color:var(--dr);font-weight:600;line-height:1.4;}
-.ts{font-size:.65rem;color:var(--muted);margin-top:3px;}
-.love-q{background:linear-gradient(135deg,#fef0f3,#fff5e6);border-radius:15px;padding:20px;
-  text-align:center;border:1px solid rgba(247,202,208,.6);margin-bottom:16px;
+.ts{font-size:.64rem;color:var(--muted);margin-top:3px;}
+.love-q{background:linear-gradient(135deg,#fef0f3,#fff5e6);border-radius:15px;padding:18px;
+  text-align:center;border:1px solid rgba(247,202,208,.6);margin-bottom:14px;
   font-size:.88rem;color:var(--dr);line-height:1.85;font-weight:500;}
-.love-q small{display:block;margin-top:7px;font-size:.7rem;color:var(--muted);letter-spacing:.06em;}
+.love-q small{display:block;margin-top:7px;font-size:.7rem;color:var(--muted);letter-spacing:.05em;}
 
 /* ── 雜項 ── */
-.spin{width:20px;height:20px;border-radius:50%;border:2px solid var(--blush);border-top-color:var(--rose);animation:rot .7s linear infinite;display:inline-block;}
+.spin{width:20px;height:20px;border-radius:50%;border:2px solid var(--blush);
+  border-top-color:var(--rose);animation:rot .7s linear infinite;display:inline-block;}
 @keyframes rot{to{transform:rotate(360deg);}}
 @keyframes sIn{from{opacity:0;transform:translateX(-8px);}to{opacity:1;transform:translateX(0);}}
 @keyframes hb{0%{transform:scale(.95);opacity:0;}50%{transform:scale(1.02);}100%{transform:scale(1);opacity:1;}}
@@ -227,50 +230,46 @@ input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;bor
   padding:11px 22px;border-radius:50px;font-size:.82rem;
   box-shadow:0 4px 16px rgba(192,82,111,.4);
   transition:transform .4s cubic-bezier(.34,1.56,.64,1),opacity .3s;
-  opacity:0;z-index:200;white-space:nowrap;}
+  opacity:0;z-index:600;white-space:nowrap;}
 .toast.show{transform:translateX(-50%) translateY(0);opacity:1;}
 </style>
 </head>
 <body>
 
-<!-- ══════════════════════════════════════
-     配對畫面（初次使用）
-══════════════════════════════════════ -->
+<!-- ════════════════════════════
+     配對畫面
+════════════════════════════ -->
 <div class="pair-overlay" id="pairOverlay">
   <div class="pair-logo">💕</div>
   <div class="pair-title">我們的小宇宙</div>
   <div class="pair-sub">和你的另一半連線，<br>共享回憶、溫度與每日情書。</div>
 
-  <!-- 建立新配對 -->
-  <div class="pair-card" id="createCard">
+  <div class="pair-card">
     <div class="pair-card-t">✨ 建立你們的專屬空間</div>
     <input type="text" id="myName" placeholder="你的暱稱（例如：小白）" style="margin-bottom:10px;">
-    <button class="btn btn-rose btn-block" id="createPairBtn">生成配對碼</button>
+    <button class="btn btn-rose btn-block" id="createBtn">生成配對碼</button>
     <div id="codeResult" style="display:none;margin-top:14px;">
-      <div class="code-hint">把下方的配對碼傳給你的另一半 👇</div>
-      <div class="code-display" id="myCode" title="點我複製">── ──</div>
-      <div class="code-hint" style="margin-top:4px;">點擊配對碼可複製</div>
+      <div class="code-hint">把下方配對碼傳給你的另一半 👇</div>
+      <div class="code-display" id="myCode">── ──</div>
+      <div class="code-hint">點擊可複製 · 等待對方加入中<span id="waitDots">…</span></div>
     </div>
   </div>
 
-  <!-- 加入現有配對 -->
   <div class="pair-card">
     <div class="pair-card-t">🔗 加入另一半的空間</div>
     <input type="text" id="partnerName" placeholder="你的暱稱" style="margin-bottom:8px;">
-    <div class="irow" style="margin-bottom:0;">
-      <input type="text" id="joinCode" placeholder="輸入對方的配對碼" style="letter-spacing:.12em;text-transform:uppercase;">
-      <button class="btn btn-teal" id="joinBtn">加入</button>
+    <div class="irow">
+      <input type="text" id="joinCode" placeholder="輸入對方的配對碼" style="letter-spacing:.1em;text-transform:uppercase;">
+      <button class="btn btn-teal" id="joinBtn">加入 →</button>
     </div>
   </div>
 
-  <div style="font-size:.72rem;color:var(--muted);text-align:center;line-height:1.7;max-width:300px;">
-    配對碼由系統隨機生成，只有輸入相同配對碼的兩人才能互相看到資料。
-  </div>
+  <div class="pair-sep">配對碼只有輸入相同碼的兩人才能互相存取資料，請勿分享給第三方。</div>
 </div>
 
-<!-- ══════════════════════════════════════
+<!-- ════════════════════════════
      主 App
-══════════════════════════════════════ -->
+════════════════════════════ -->
 <div class="app" id="mainApp" style="display:none;">
 
 <!-- 首頁 -->
@@ -295,12 +294,8 @@ input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;bor
 
 <!-- 回憶 -->
 <div class="page" id="p-memory">
-  <div class="page-header">
-    <div class="eyebrow">Shared Memory Book</div>
-    <h2>回憶<span>存摺</span></h2>
-    <p>兩個人共同的美好瞬間。</p>
-  </div>
-  <div id="syncBarMem" class="sync-bar"><div class="sync-dot" id="memSyncDot"></div><span id="memSyncTxt">連線中…</span></div>
+  <div class="page-header"><div class="eyebrow">Shared Memory Book</div><h2>回憶<span>存摺</span></h2><p>兩個人共同的美好瞬間。</p></div>
+  <div class="sync-bar"><div class="sync-dot loading" id="memDot"></div><span id="memTxt">連線中…</span></div>
   <div class="card">
     <div class="card-t">📝 存入新回憶</div>
     <div class="irow">
@@ -311,37 +306,26 @@ input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;bor
   <div class="card">
     <div class="card-t">💌 我們的清單</div>
     <div class="badge"><span>💗</span><span id="countTxt">讀取中…</span></div>
-    <ul class="mem-list" id="memList"><li class="empty">讀取中…</li></ul>
+    <ul class="mem-list" id="memList"><li class="empty"><span class="spin"></span></li></ul>
   </div>
 </div>
 
-<!-- 情書信箱（新增：共享收發） -->
+<!-- 情書 -->
 <div class="page" id="p-letter">
-  <div class="page-header">
-    <div class="eyebrow">Love Letter Inbox</div>
-    <h2>情書<span>信箱</span></h2>
-    <p>寫一封情書，悄悄送到 TA 的信箱。</p>
-  </div>
-  <div id="syncBarLetter" class="sync-bar"><div class="sync-dot" id="letterSyncDot"></div><span id="letterSyncTxt">連線中…</span></div>
-
-  <!-- 寫信 -->
+  <div class="page-header"><div class="eyebrow">Love Letter Inbox</div><h2>情書<span>信箱</span></h2><p>寫一封情書，送到 TA 的信箱。</p></div>
+  <div class="sync-bar"><div class="sync-dot loading" id="letterDot"></div><span id="letterTxt">連線中…</span></div>
   <div class="card">
     <div class="card-t">✍️ 寫一封情書給 TA</div>
-    <div style="font-size:.8rem;color:var(--muted);margin-bottom:10px;">選一個心情，生成情書後傳送給對方：</div>
-    <div style="display:flex;flex-wrap:wrap;gap:7px;margin-bottom:12px;" id="moodChips"></div>
+    <div style="display:flex;flex-wrap:wrap;gap:7px;margin-bottom:10px;" id="moodChips"></div>
     <input type="text" id="letterMood" placeholder="或自己輸入心情關鍵字…" style="margin-bottom:10px;">
     <button class="btn btn-gold btn-block" id="genLetterBtn" style="margin-bottom:14px;">✨ 生成情書</button>
-    <div class="letter-box" id="letterBox">
-      <span style="color:var(--muted);font-size:.82rem;">點選心情標籤或輸入關鍵字，生成一封溫柔的情書 💌</span>
-    </div>
+    <div class="letter-box" id="letterBox"><span style="color:var(--muted);font-size:.82rem;">點選心情標籤，生成一封溫柔的情書 💌</span></div>
     <div class="letter-acts" id="letterActs">
       <button class="btn btn-ghost" id="copyLetterBtn" style="flex:1;">📋 複製</button>
       <button class="btn btn-gold" id="regenLetterBtn" style="flex:1;">🔄 再生成</button>
-      <button class="btn btn-rose" id="sendLetterBtn" style="flex:1;">💌 傳送給 TA</button>
+      <button class="btn btn-rose" id="sendLetterBtn" style="flex:1;">💌 送出給 TA</button>
     </div>
   </div>
-
-  <!-- 收件匣 -->
   <div class="card">
     <div class="card-t">📬 TA 傳給我的情書</div>
     <div id="inbox"><div class="empty">還沒有收到情書…</div></div>
@@ -350,35 +334,25 @@ input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;bor
 
 <!-- 約會任務 -->
 <div class="page" id="p-date">
-  <div class="page-header">
-    <div class="eyebrow">Date Challenge</div>
-    <h2>約會<span>任務</span></h2>
-    <p>完成挑戰，一起創造新回憶。</p>
-  </div>
+  <div class="page-header"><div class="eyebrow">Date Challenge</div><h2>約會<span>任務</span></h2><p>完成挑戰，一起創造新回憶。</p></div>
   <div class="card">
     <div class="card-t">🎯 本週挑戰</div>
-    <div class="ch-inner" id="chCard">
-      <div style="color:var(--muted);font-size:.83rem;">點下方抽出你們的約會任務 🎲</div>
-    </div>
+    <div class="ch-inner" id="chCard"><div style="color:var(--muted);font-size:.83rem;">點下方抽出你們的約會任務 🎲</div></div>
     <div class="ch-acts">
       <button class="btn btn-teal" style="flex:1;" id="drawChBtn">🎲 隨機抽取</button>
       <button class="btn btn-ghost" style="flex:1;display:none;" id="doneCh">✅ 完成了！</button>
     </div>
   </div>
   <div class="card">
-    <div class="card-t">🗂️ 指定分類抽取</div>
+    <div class="card-t">🗂️ 指定分類</div>
     <div style="display:flex;flex-wrap:wrap;gap:8px;" id="catBtns"></div>
   </div>
 </div>
 
 <!-- 溫度計 -->
 <div class="page" id="p-mood">
-  <div class="page-header">
-    <div class="eyebrow">Mood Thermometer</div>
-    <h2>感情<span>溫度計</span></h2>
-    <p>兩人各自記錄今天的感情溫度。</p>
-  </div>
-  <div id="syncBarMood" class="sync-bar"><div class="sync-dot" id="moodSyncDot"></div><span id="moodSyncTxt">連線中…</span></div>
+  <div class="page-header"><div class="eyebrow">Mood Thermometer</div><h2>感情<span>溫度計</span></h2><p>兩人各自記錄今天的感情溫度。</p></div>
+  <div class="sync-bar"><div class="sync-dot loading" id="moodDot"></div><span id="moodTxt">連線中…</span></div>
   <div class="card">
     <div class="card-t">📊 今日溫度</div>
     <div class="mood-sec">
@@ -388,33 +362,23 @@ input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;bor
         <div class="mood-emojis"><span>😔</span><span>😐</span><span>🙂</span><span>😊</span><span>🥰</span></div>
       </div>
     </div>
-    <!-- 對方的溫度（從共享儲存讀取，唯讀） -->
-    <div class="partner-mood-display" id="partnerMoodBox" style="display:none;">
-      <div class="pm-label" id="partnerMoodLabel">TA 今天的溫度：</div>
+    <button class="btn btn-purple btn-block" id="saveMoodBtn">💾 記錄我的溫度</button>
+    <div class="partner-mood" id="partnerMoodBox" style="display:none;margin-top:12px;">
+      <div class="pm-lbl" id="partnerMoodLbl">TA 今天的溫度：</div>
       <div class="pm-val" id="partnerMoodVal">還沒有記錄</div>
     </div>
-    <button class="btn btn-purple btn-block" id="saveMoodBtn" style="margin-top:14px;">💾 記錄我的溫度</button>
-    <button class="btn btn-ghost btn-block" id="cmpMoodBtn" style="margin-top:8px;display:none;">💞 分析我們的溫差</button>
+    <button class="btn btn-ghost btn-block" id="cmpBtn" style="margin-top:10px;display:none;">💞 分析我們的溫差</button>
     <div class="mood-result" id="moodRes"></div>
   </div>
-  <div class="card">
-    <div class="card-t">📅 溫度歷史</div>
-    <div id="moodHist"><div class="empty" style="padding:12px 0;">還沒有記錄。</div></div>
-  </div>
+  <div class="card"><div class="card-t">📅 溫度歷史</div><div id="moodHist"><div class="empty" style="padding:12px 0;">還沒有記錄。</div></div></div>
 </div>
 
 <!-- 真心話 -->
 <div class="page" id="p-truth">
-  <div class="page-header">
-    <div class="eyebrow">Truth or Talk</div>
-    <h2>真心話<span>大冒險</span></h2>
-    <p>專為你們設計的深度問題。</p>
-  </div>
+  <div class="page-header"><div class="eyebrow">Truth or Talk</div><h2>真心話<span>大冒險</span></h2><p>專為你們設計的深度問題。</p></div>
   <div class="card">
     <div class="card-t">🃏 抽一張牌</div>
-    <div class="truth-disp" id="truthDisp">
-      <div style="color:var(--muted);font-size:.86rem;">選擇難度，開啟今晚的對話 💬</div>
-    </div>
+    <div class="truth-disp" id="truthDisp"><div style="color:var(--muted);font-size:.86rem;">選擇難度，開啟今晚的對話 💬</div></div>
     <div class="truth-btns">
       <button class="btn btn-purple" id="truth-easy">🌸 輕鬆</button>
       <button class="btn btn-purple" id="truth-deep">💬 深度</button>
@@ -434,11 +398,7 @@ input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;bor
 
 <!-- 緊急 -->
 <div class="page" id="p-emg">
-  <div class="page-header">
-    <div class="eyebrow">Emergency Love Recall</div>
-    <h2>緊急<span>喚回裝置</span></h2>
-    <p>當你快撐不住的時候，來這裡。</p>
-  </div>
+  <div class="page-header"><div class="eyebrow">Emergency Love Recall</div><h2>緊急<span>喚回</span></h2><p>當你快撐不住的時候，來這裡。</p></div>
   <div class="card">
     <p style="font-size:.83rem;color:var(--muted);margin-bottom:16px;line-height:1.85;text-align:center;">
       感情有時候會讓人很累。<br>但在放棄之前，先讓一段回憶提醒你——<br><b style="color:var(--dr);">我們曾經有多好。</b>
@@ -463,173 +423,72 @@ input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;bor
 <nav class="nav" id="mainNav" style="display:none;">
   <button class="nav-btn active" data-p="p-home"><span class="ni">🏠</span><span class="nl">首頁</span></button>
   <button class="nav-btn" data-p="p-memory"><span class="ni">📖</span><span class="nl">回憶</span></button>
-  <button class="nav-btn" data-p="p-letter"><span class="ni">💌</span><span class="nl">情書</span><span class="dot" id="inboxDot"></span></button>
+  <button class="nav-btn" data-p="p-letter"><span class="ni">💌</span><span class="nl">情書</span><span class="rdot" id="inboxDot"></span></button>
   <button class="nav-btn" data-p="p-mood"><span class="ni">🌡️</span><span class="nl">溫度</span></button>
   <button class="nav-btn" data-p="p-truth"><span class="ni">🃏</span><span class="nl">真心話</span></button>
 </nav>
-
 <div class="toast" id="toast"></div>
 
-<script>
-'use strict';
-/* ══════════════════════════════
-   儲存層：優先用 window.storage（Claude 環境），
-   fallback 到 localStorage（GitHub Pages）
-══════════════════════════════ */
-const S={
-  async get(k,shared=false){
-    if(window.storage){
-      try{ const r=await window.storage.get(k,shared); return r?JSON.parse(r.value):null; }catch{ return null; }
-    } else {
-      try{ return JSON.parse(localStorage.getItem((shared?'sh_':'')+k)||'null'); }catch{ return null; }
-    }
-  },
-  async set(k,v,shared=false){
-    if(window.storage){
-      try{ await window.storage.set(k,JSON.stringify(v),shared); }catch{}
-    } else {
-      try{ localStorage.setItem((shared?'sh_':'')+k,JSON.stringify(v)); }catch{}
-    }
-  }
+<!-- ════════════════════════════
+     Firebase SDK（從 CDN 載入，不需 npm）
+════════════════════════════ -->
+<script type="module">
+import { initializeApp }        from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+import { getDatabase, ref, set, get, onValue, push, update, serverTimestamp }
+  from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js';
+
+/* ════════════════════════════
+   Firebase 設定（你自己的專案）
+════════════════════════════ */
+const firebaseConfig = {
+  apiKey:            "AIzaSyBhzjHAKhmIAN59u2s50wiDYCawYRpJa5o",
+  authDomain:        "loverapp-c14a0.firebaseapp.com",
+  databaseURL:       "https://loverapp-c14a0-default-rtdb.firebaseio.com",
+  projectId:         "loverapp-c14a0",
+  storageBucket:     "loverapp-c14a0.firebasestorage.app",
+  messagingSenderId: "208583117452",
+  appId:             "1:208583117452:web:33daf5639251b38eb109a9",
+  measurementId:     "G-EDFKSYCT92"
 };
+const app = initializeApp(firebaseConfig);
+const db  = getDatabase(app);
 
-/* ══════════════════════════════
-   配對狀態
-══════════════════════════════ */
-let myName='', partnerName='', coupleCode='', myRole=''; // 'A' or 'B'
-const PRIVATE_KEY = ()=> `prv_${coupleCode}_${myRole}`;
-const SHARED_KEY  = (k)=> `couple_${coupleCode}_${k}`;
+/* ════════════════════════════
+   狀態變數
+════════════════════════════ */
+let myName='', partnerName='TA', coupleCode='', myRole=''; // 'A' or 'B'
+const coupleRef  = ()=> ref(db, `couples/${coupleCode}`);
+const sharedRef  = (k)=> ref(db, `couples/${coupleCode}/${k}`);
+const partnerRole= ()=> myRole==='A'?'B':'A';
 
-/* ══════════════════════════════
-   配對畫面邏輯
-══════════════════════════════ */
-async function initPairing(){
-  // 嘗試從本地讀取已配對資料
-  const saved = await S.get('loveapp_session');
-  if(saved && saved.coupleCode && saved.myName){
-    myName=saved.myName; coupleCode=saved.coupleCode; myRole=saved.myRole;
-    partnerName=saved.partnerName||'TA';
-    enterApp();
-    return;
-  }
-  document.getElementById('pairOverlay').style.display='flex';
+/* ════════════════════════════
+   本機 session（記住已配對狀態）
+════════════════════════════ */
+function saveLocal(){ localStorage.setItem('loveapp_session',JSON.stringify({myName,partnerName,coupleCode,myRole})); }
+function loadLocal(){
+  try{
+    const s=JSON.parse(localStorage.getItem('loveapp_session')||'null');
+    if(s&&s.coupleCode){ myName=s.myName; partnerName=s.partnerName||'TA'; coupleCode=s.coupleCode; myRole=s.myRole; return true; }
+  }catch{}
+  return false;
 }
 
-function genCode(){
-  const chars='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-  let c='';
-  for(let i=0;i<6;i++) c+=chars[Math.floor(Math.random()*chars.length)];
-  return c.slice(0,3)+'-'+c.slice(3);
-}
-
-async function createPair(){
-  const n=document.getElementById('myName').value.trim();
-  if(!n){showToast('請先輸入你的暱稱！');return;}
-  const code=genCode();
-  myName=n; coupleCode=code; myRole='A'; partnerName='TA';
-  // 寫入共享空間讓對方能加入
-  await S.set(SHARED_KEY('host'),{name:n,ts:Date.now()},true);
-  document.getElementById('myCode').textContent=code;
-  document.getElementById('codeResult').style.display='block';
-  document.getElementById('myCode').onclick=()=>{
-    navigator.clipboard&&navigator.clipboard.writeText(code);
-    showToast('配對碼已複製 ✨');
-  };
-  // 輪詢等待對方加入
-  pollForPartner();
-}
-
-async function joinPair(){
-  const n=document.getElementById('partnerName').value.trim();
-  const raw=document.getElementById('joinCode').value.trim().toUpperCase().replace(/[^A-Z0-9]/g,'-').slice(0,7);
-  if(!n){showToast('請先輸入你的暱稱！');return;}
-  if(raw.length<7){showToast('請輸入完整的配對碼（如 ABC-123）');return;}
-  // 讀取共享空間確認 host 存在
-  const host=await S.get(`couple_${raw}_host`,true);
-  if(!host){showToast('找不到這個配對碼，請確認後再試 🙏');return;}
-  myName=n; coupleCode=raw; myRole='B'; partnerName=host.name||'TA';
-  await S.set(`couple_${raw}_guest`,{name:n,ts:Date.now()},true);
-  await saveSession(); enterApp();
-}
-
-async function saveSession(){
-  await S.set('loveapp_session',{myName,coupleCode,myRole,partnerName});
-}
-
-let pollTimer=null;
-async function pollForPartner(){
-  pollTimer=setInterval(async()=>{
-    const g=await S.get(SHARED_KEY('guest'),true);
-    if(g){
-      clearInterval(pollTimer);
-      partnerName=g.name||'TA';
-      await saveSession();
-      enterApp();
-    }
-  },2000);
-}
-
-function enterApp(){
-  document.getElementById('pairOverlay').style.display='none';
-  document.getElementById('mainApp').style.display='';
-  document.getElementById('mainNav').style.display='flex';
-  document.getElementById('homeGreet').textContent=`${myName} 和 ${partnerName} 的小宇宙 💕`;
-  loadAll(); bindAll(); startSync();
-}
-
-/* ══════════════════════════════
-   資料載入
-══════════════════════════════ */
-let memories=[], moodLog=[], inbox=[], lastReadInbox=0;
-async function loadAll(){
-  memories = (await S.get(SHARED_KEY('memories'),true)) || [];
-  moodLog  = (await S.get(SHARED_KEY('moodlog'),true)) || [];
-  inbox    = (await S.get(SHARED_KEY(`inbox_${myRole}`),true)) || [];
-  lastReadInbox = (await S.get(`loveapp_lastread_${myRole}`)) || 0;
-  renderMems(); renderMoodHist(); renderInbox(); renderHomeQ(); initChips(); initCatBtns();
-  checkUnread();
-}
-
-/* ══════════════════════════════
-   定時同步（每 8 秒刷新共享資料）
-══════════════════════════════ */
-function startSync(){
-  setInterval(async()=>{
-    const newMems = await S.get(SHARED_KEY('memories'),true);
-    if(newMems) { memories=newMems; renderMems(); }
-    // 對方溫度
-    const partnerRole = myRole==='A'?'B':'A';
-    const pm = await S.get(SHARED_KEY(`mood_${partnerRole}`),true);
-    renderPartnerMood(pm);
-    // 收件匣
-    const newInbox = await S.get(SHARED_KEY(`inbox_${myRole}`),true);
-    if(newInbox){ inbox=newInbox; renderInbox(); checkUnread(); }
-    updateSyncBars(true);
-  },8000);
-  updateSyncBars(true);
-}
-function updateSyncBars(online){
-  ['memSyncDot','letterSyncDot','moodSyncDot'].forEach(id=>{
-    const el=document.getElementById(id);
-    if(el) el.className=`sync-dot ${online?'':'off'}`;
-  });
-  ['memSyncTxt','letterSyncTxt','moodSyncTxt'].forEach(id=>{
-    const el=document.getElementById(id);
-    if(el) el.textContent=online?`已連線 · 和 ${partnerName} 共用`:'離線模式';
-  });
-}
-
-/* ══════════════════════════════
+/* ════════════════════════════
    工具
-══════════════════════════════ */
-const MIC=['🌸','💌','🌙','☁️','✨','🌷','🍃','💫','🎵','🌊'];
+════════════════════════════ */
 function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
-let toastTimer=null;
+const MIC=['🌸','💌','🌙','☁️','✨','🌷','🍃','💫','🎵','🌊'];
+let toastT=null;
 function showToast(msg){
   const t=document.getElementById('toast');
   t.textContent=msg; t.classList.add('show');
-  clearTimeout(toastTimer);
-  toastTimer=setTimeout(()=>t.classList.remove('show'),2800);
+  clearTimeout(toastT); toastT=setTimeout(()=>t.classList.remove('show'),2800);
+}
+function setSync(dots,txts,online){
+  const cls=online?'sync-dot':'sync-dot off';
+  const txt=online?`已連線 · 和 ${partnerName} 共用`:'連線失敗，請重整';
+  dots.forEach(id=>{const el=document.getElementById(id);if(el)el.className=cls;});
+  txts.forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=txt;});
 }
 function goTo(pid){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
@@ -638,12 +497,132 @@ function goTo(pid){
   const nb=document.querySelector(`.nav-btn[data-p="${pid}"]`);
   if(nb) nb.classList.add('active');
   document.getElementById(pid).scrollTop=0;
-  if(pid==='p-letter'){ clearUnread(); }
+  if(pid==='p-letter') markInboxRead();
 }
 
-/* ══════════════════════════════
+/* ════════════════════════════
+   配對邏輯
+════════════════════════════ */
+function genCode(){
+  const c='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  let s='';for(let i=0;i<6;i++)s+=c[Math.floor(Math.random()*c.length)];
+  return s.slice(0,3)+'-'+s.slice(3);
+}
+
+let _guestListener=null;
+
+async function createPair(){
+  const n=document.getElementById('myName').value.trim();
+  if(!n){showToast('請先輸入你的暱稱！');return;}
+  const btn=document.getElementById('createBtn');
+  btn.textContent='建立中…'; btn.disabled=true;
+  try{
+    myName=n; coupleCode=genCode(); myRole='A';
+    await set(ref(db,`couples/${coupleCode}/meta`),{hostName:n,created:serverTimestamp()});
+    document.getElementById('myCode').textContent=coupleCode;
+    document.getElementById('codeResult').style.display='block';
+    btn.textContent='已生成配對碼 ✓';
+    // 點擊複製
+    document.getElementById('myCode').onclick=()=>{
+      if(navigator.clipboard&&navigator.clipboard.writeText){
+        navigator.clipboard.writeText(coupleCode).then(()=>showToast('配對碼已複製 ✨'));
+      } else {
+        const ta=document.createElement('textarea');ta.value=coupleCode;
+        document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);
+        showToast('配對碼已複製 ✨');
+      }
+    };
+    // 監聽對方加入（保存 unsubscribe）
+    if(_guestListener){_guestListener();_guestListener=null;}
+    let entered=false;
+    _guestListener=onValue(ref(db,`couples/${coupleCode}/meta/guestName`),snap=>{
+      if(snap.val()&&!entered){
+        entered=true;
+        if(_guestListener){_guestListener();_guestListener=null;}
+        partnerName=snap.val();
+        saveLocal(); enterApp();
+      }
+    });
+    // dots 動畫
+    let d=0;
+    const di=setInterval(()=>{
+      const el=document.getElementById('waitDots');
+      if(el) el.textContent=['.','..','...'][d++%3];
+    },600);
+    window._waitCleanup=()=>{clearInterval(di);};
+  }catch(e){
+    console.error(e);
+    showToast('建立失敗，請確認 Firebase 規則已開放 🙏');
+    btn.textContent='生成配對碼'; btn.disabled=false;
+  }
+}
+
+async function joinPair(){
+  const n=document.getElementById('partnerName').value.trim();
+  // 支援有無連字號、大小寫、空格
+  let code=document.getElementById('joinCode').value.trim().toUpperCase().replace(/[\s\-]/g,'');
+  if(!n){showToast('請先輸入你的暱稱！');return;}
+  if(code.length!==6){showToast(`配對碼要 6 個字（目前輸入了 ${code.length} 個）`);return;}
+  code=code.slice(0,3)+'-'+code.slice(3); // 統一加上連字號
+  const btn=document.getElementById('joinBtn');
+  btn.textContent='加入中…'; btn.disabled=true;
+  try{
+    const snap=await get(ref(db,`couples/${code}/meta/hostName`));
+    if(!snap.val()){
+      showToast('找不到這個配對碼，請確認後再試 🙏');
+      btn.textContent='加入 →'; btn.disabled=false; return;
+    }
+    myName=n; coupleCode=code; myRole='B'; partnerName=snap.val();
+    await update(ref(db,`couples/${code}/meta`),{guestName:n});
+    saveLocal(); enterApp();
+  }catch(e){
+    console.error(e);
+    showToast('加入失敗，請確認 Firebase 規則已開放 🙏');
+    btn.textContent='加入 →'; btn.disabled=false;
+  }
+}
+
+function enterApp(){
+  if(window._waitCleanup) window._waitCleanup();
+  document.getElementById('pairOverlay').style.display='none';
+  document.getElementById('mainApp').style.display='';
+  document.getElementById('mainNav').style.display='flex';
+  document.getElementById('homeGreet').textContent=`${myName} 和 ${partnerName} 的小宇宙 💕`;
+  renderHomeQ(); initChips(); initCatBtns();
+  subscribeAll();
+}
+
+/* ════════════════════════════
+   Firebase 即時訂閱（onValue = 資料變動立即更新）
+════════════════════════════ */
+function subscribeAll(){
+  // 回憶
+  onValue(sharedRef('memories'),snap=>{
+    const data=snap.val()||{};
+    const list=Object.entries(data).map(([k,v])=>({...v,_key:k}))
+      .sort((a,b)=>a.ts-b.ts);
+    renderMems(list);
+    setSync(['memDot'],['memTxt'],true);
+  });
+  // 對方溫度
+  onValue(ref(db,`couples/${coupleCode}/mood/${partnerRole()}`),snap=>{
+    renderPartnerMood(snap.val());
+    setSync(['moodDot'],['moodTxt'],true);
+  });
+  // 我的收件匣
+  onValue(ref(db,`couples/${coupleCode}/inbox/${myRole}`),snap=>{
+    const data=snap.val()||{};
+    const list=Object.entries(data).map(([k,v])=>({...v,_key:k}))
+      .sort((a,b)=>b.ts-a.ts);
+    renderInbox(list);
+    checkUnread(list);
+    setSync(['letterDot'],['letterTxt'],true);
+  });
+}
+
+/* ════════════════════════════
    首頁語錄
-══════════════════════════════ */
+════════════════════════════ */
 const QUOTES=[
   {t:'愛不是尋找一個完美的人，而是學會用完美的眼光欣賞那個不完美的人。',a:'— 薩姆·基恩'},
   {t:'真正的愛情，不是轟轟烈烈的誓言，而是每天早上醒來仍然選擇對方。',a:'— 無名'},
@@ -656,44 +635,43 @@ function renderHomeQ(){
   document.getElementById('homeQ').innerHTML=`${q.t}<small>${q.a}</small>`;
 }
 
-/* ══════════════════════════════
-   回憶（共享）
-══════════════════════════════ */
-function renderMems(){
-  const list=document.getElementById('memList');
+/* ════════════════════════════
+   回憶（Firebase push）
+════════════════════════════ */
+function renderMems(list){
+  const el=document.getElementById('memList');
   const ct=document.getElementById('countTxt');
-  ct.textContent=memories.length?`已存入 ${memories.length} 段回憶`:'還沒有回憶';
-  if(!memories.length){list.innerHTML='<li class="empty">還沒有回憶喔，把第一個美好瞬間存進來吧 💕</li>';return;}
-  list.innerHTML=memories.map((m,i)=>`
+  ct.textContent=list.length?`已存入 ${list.length} 段回憶`:'還沒有回憶';
+  if(!list.length){el.innerHTML='<li class="empty">還沒有回憶喔，把第一個美好瞬間存進來吧 💕</li>';return;}
+  el.innerHTML=[...list].reverse().map((m,i)=>`
     <li class="mem-item">
       <span class="mem-icon">${MIC[i%MIC.length]}</span>
       <div style="flex:1;">
-        <div class="mem-text">${esc(m.text||m)}</div>
-        <div class="mem-who">${esc(m.who||'')} ${m.ts?'· '+new Date(m.ts).toLocaleDateString('zh-TW'):''}</div>
+        <div class="mem-text">${esc(m.text)}</div>
+        <div class="mem-who">${esc(m.who)} · ${m.ts?new Date(m.ts).toLocaleDateString('zh-TW'):''}</div>
       </div>
-      ${m.who===myName?`<button class="btn-del" data-idx="${i}">✕</button>`:''}
+      ${m.who===myName?`<button class="btn-del" data-key="${m._key}">✕</button>`:''}
     </li>`).join('');
 }
 async function saveMem(){
   const inp=document.getElementById('newMem'),t=inp.value.trim();
   if(!t){showToast('請先輸入一段回憶！');return;}
-  memories.push({text:t,who:myName,ts:Date.now()});
-  await S.set(SHARED_KEY('memories'),memories,true);
-  inp.value=''; renderMems(); showToast('回憶已鎖進共享存摺 🔒💗');
+  await push(sharedRef('memories'),{text:t,who:myName,ts:Date.now()});
+  inp.value=''; showToast('回憶已鎖進共享存摺 🔒💗');
 }
-async function delMem(i){
+async function delMem(key){
   if(!confirm('確定要刪除這段回憶嗎？'))return;
-  memories.splice(i,1);
-  await S.set(SHARED_KEY('memories'),memories,true);
-  renderMems(); showToast('已輕輕放下這段記憶。');
+  await set(ref(db,`couples/${coupleCode}/memories/${key}`),null);
+  showToast('已輕輕放下這段記憶。');
 }
 
-/* ══════════════════════════════
+/* ════════════════════════════
    緊急
-══════════════════════════════ */
+════════════════════════════ */
 const DEF=['第一次見面時你的笑容。','一起克服困難後擁抱的溫度。','那些雖然平凡但有你陪伴的晚餐。'];
 function trigEmg(){
-  const pool=memories.length?memories.map(m=>m.text||m):DEF;
+  const snap=document.querySelectorAll('#memList .mem-text');
+  const pool=snap.length?Array.from(snap).map(el=>el.textContent):DEF;
   const c=pool[Math.floor(Math.random()*pool.length)];
   const box=document.getElementById('emgBox');
   document.getElementById('emgQuote').textContent=`「${c}」`;
@@ -704,169 +682,89 @@ function trigEmg(){
 async function saveVent(){
   const t=document.getElementById('ventText').value.trim();
   if(!t){showToast('寫點什麼吧…');return;}
-  memories.push({text:'💭 內心話：'+t.slice(0,40)+(t.length>40?'…':''),who:myName,ts:Date.now()});
-  await S.set(SHARED_KEY('memories'),memories,true);
-  document.getElementById('ventText').value=''; renderMems(); showToast('內心話已安全鎖起來 🔒');
+  await push(sharedRef('memories'),{text:'💭 內心話：'+t.slice(0,40)+(t.length>40?'…':''),who:myName,ts:Date.now()});
+  document.getElementById('ventText').value=''; showToast('內心話已安全鎖起來 🔒');
 }
 
-/* ══════════════════════════════
+/* ════════════════════════════
    情書（含生氣）
-══════════════════════════════ */
+════════════════════════════ */
 let lastLetter='';
 const CHIPS=['有點想你','好開心','有些委屈','覺得很累','超幸福','有點吃醋','特別感謝你','想道歉','生氣！'];
 const LETTERS={
-  '有點想你':[
-    '今天走在路上，突然想到你說過的一句話，嘴角就不自覺地彎了起來。想你這件事，不需要理由，只是自然而然地，就這樣發生了。',
-    '不知道你現在在做什麼，但腦袋裡有個聲音一直在說，好想見到你。想你的感覺，像是冬天裡少了一件外套，不是冷，只是差了那麼一點點的完整。',
-    '今天沒有特別的事，就是想你。沒有原因，也不需要原因。只是希望你知道，在某個角落，有人正在想著你。',
-    '手機靜靜的，但心裡一直在喊你的名字。也許想念就是這樣——安靜卻很大聲，輕輕的卻很重。',
-  ],
-  '好開心':[
-    '今天發生了一件很開心的事，第一個想分享的人是你。能把快樂傳遞給你，是我最喜歡做的事之一。',
-    '今天整個人都是亮的，因為有你在。幸福這件事，原來可以這麼具體——就是心裡有個人，讓普通的一天變得特別。',
-    '今天心情好好，好想把這份好心情打包，送給你。謝謝你讓我的生活多了這麼多值得開心的理由。',
-    '笑著笑著就想到你了。希望你今天也有這樣的感覺——因為某件小事，忽然覺得生活很美好。',
-  ],
-  '有些委屈':[
-    '今天有點不好受，但說不清楚。只是很希望你在旁邊，不用說什麼，就靜靜地陪著我。',
-    '心裡有一點點委屈，但看到你就覺得，沒什麼大不了。你對我來說，是最有效的安慰劑。',
-    '有些話還沒找到方法說出口，但我想讓你知道，我需要你。不是要你解決什麼，只是需要你在。',
-    '今天心裡有點悶，卻又不想讓你擔心。只是想說，能夠難過之後還有你可以靠著，是很幸運的事。',
-  ],
-  '覺得很累':[
-    '今天很累，累到只想什麼都不想，只是靠著你。謝謝你一直都在，讓我知道有個地方可以放下所有的重量。',
-    '世界很吵，但有你的地方很安靜。累的時候最想要的，不是解決方案，只是你，就夠了。',
-    '今天撐著撐著，忽然很想你。不是需要你做什麼，只是，如果現在你在旁邊，一切好像都會輕一點。',
-    '好累，但想到等一下可以見到你，又覺得有力氣了。你是我今天最期待的事情。',
-  ],
-  '超幸福':[
-    '和你在一起的每一天，都讓我覺得這輩子的運氣都用對地方了。謝謝你出現在我的人生裡。',
-    '有時候我會想，如果沒有遇見你，我現在會在哪裡？想到這個，就很慶幸命運把我們帶到了同一個地方。',
-    '幸福是什麼？就是有你。沒有特別的定義，只是每次想起你，心裡就暖暖的，這樣就夠了。',
-    '謝謝你讓平凡的生活變得這麼有光。我真的，真的很喜歡現在的一切。',
-  ],
-  '有點吃醋':[
-    '我知道這樣有點幼稚，但我就是希望你的眼睛裡，只有我最多。這應該不算過分吧？',
-    '有時候會吃醋，不是不信任你，只是因為太在乎了。希望你不要嫌我麻煩，我只是很喜歡你。',
-    '我承認，我有點小吃醋。但這也是因為你對我太重要了——重要到我想把你的注意力，都留給自己。',
-    '吃醋這件事，說起來有點丟臉，但說實話——我就是想讓你多看我一眼。你願意嗎？',
-  ],
-  '特別感謝你':[
-    '謝謝你在我最需要的時候出現，謝謝你說的每一句體貼的話，謝謝你讓我知道，被人好好對待是什麼感覺。',
-    '不需要做什麼大事，你只是陪著我，就已經給了我很多很多。謝謝你，真的。',
-    '今天想認真說一聲謝謝。謝謝你一直都這麼溫柔，謝謝你讓我的生活多了這麼多值得珍惜的片段。',
-    '有你在，很多困難的事都變得沒那麼難了。謝謝你成為我最堅實的後盾，我很愛你。',
-  ],
-  '想道歉':[
-    '對不起，我知道那時候我說的話有點傷人。我不是故意的，只是情緒先跑出來了。你願意讓我重新好好說嗎？',
-    '我知道最近讓你委屈了。對不起，我想變成更好的人，讓你覺得在這段感情裡，一切都是值得的。',
-    '有些話說出口就後悔了。對不起，我愛你，這一點從來沒有變過。希望你知道，你對我有多重要。',
-    '想道歉，但更想讓你知道——不管怎樣，我都不想失去你。我們可以好好說嗎？',
-  ],
-  /* ── 生氣（直接說清楚版）── */
-  '生氣':[
-    '我今天很生氣，因為你說的那句話讓我覺得自己不被尊重。我不是在無理取鬧——那個當下我真的很受傷。我希望你可以正視這件事，給我一個真誠的回應，而不是輕描淡寫帶過。',
-    '有件事我必須直接說：你今天的做法讓我感覺被忽略了。我知道你可能沒有這個意思，但那個當下對我來說很不好受。我需要你承認這件事對我造成了影響，而不是假裝什麼都沒發生。',
-    '我現在很不舒服，因為你答應過我的事沒有做到。這不是第一次了，我需要你告訴我，這對你來說是不是真的重要。我不想一個人一直在乎，然後假裝沒關係。',
-    '我必須說清楚：今天你的態度讓我覺得我說的話對你不重要。不是我太敏感——那個當下我真的感受到了被忽視。我希望你能好好聽我說完，而不是轉移話題或替自己找理由。',
-  ],
+  '有點想你':['今天走在路上，突然想到你說過的一句話，嘴角就不自覺地彎了起來。想你這件事，不需要理由，只是自然而然地，就這樣發生了。','不知道你現在在做什麼，但腦袋裡有個聲音一直在說，好想見到你。想你的感覺，像是冬天裡少了一件外套，不是冷，只是差了那麼一點點的完整。','今天沒有特別的事，就是想你。沒有原因，也不需要原因。只是希望你知道，在某個角落，有人正在想著你。','手機靜靜的，但心裡一直在喊你的名字。也許想念就是這樣——安靜卻很大聲，輕輕的卻很重。'],
+  '好開心':['今天發生了一件很開心的事，第一個想分享的人是你。能把快樂傳遞給你，是我最喜歡做的事之一。','今天整個人都是亮的，因為有你在。幸福這件事，原來可以這麼具體——就是心裡有個人，讓普通的一天變得特別。','今天心情好好，好想把這份好心情打包，送給你。謝謝你讓我的生活多了這麼多值得開心的理由。','笑著笑著就想到你了。希望你今天也有這樣的感覺——因為某件小事，忽然覺得生活很美好。'],
+  '有些委屈':['今天有點不好受，但說不清楚。只是很希望你在旁邊，不用說什麼，就靜靜地陪著我。','心裡有一點點委屈，但看到你就覺得，沒什麼大不了。你對我來說，是最有效的安慰劑。','有些話還沒找到方法說出口，但我想讓你知道，我需要你。不是要你解決什麼，只是需要你在。','今天心裡有點悶，卻又不想讓你擔心。只是想說，能夠難過之後還有你可以靠著，是很幸運的事。'],
+  '覺得很累':['今天很累，累到只想什麼都不想，只是靠著你。謝謝你一直都在，讓我知道有個地方可以放下所有的重量。','世界很吵，但有你的地方很安靜。累的時候最想要的，不是解決方案，只是你，就夠了。','今天撐著撐著，忽然很想你。不是需要你做什麼，只是，如果現在你在旁邊，一切好像都會輕一點。','好累，但想到等一下可以見到你，又覺得有力氣了。你是我今天最期待的事情。'],
+  '超幸福':['和你在一起的每一天，都讓我覺得這輩子的運氣都用對地方了。謝謝你出現在我的人生裡。','有時候我會想，如果沒有遇見你，我現在會在哪裡？想到這個，就很慶幸命運把我們帶到了同一個地方。','幸福是什麼？就是有你。沒有特別的定義，只是每次想起你，心裡就暖暖的，這樣就夠了。','謝謝你讓平凡的生活變得這麼有光。我真的，真的很喜歡現在的一切。'],
+  '有點吃醋':['我知道這樣有點幼稚，但我就是希望你的眼睛裡，只有我最多。這應該不算過分吧？','有時候會吃醋，不是不信任你，只是因為太在乎了。希望你不要嫌我麻煩，我只是很喜歡你。','我承認，我有點小吃醋。但這也是因為你對我太重要了——重要到我想把你的注意力，都留給自己。','吃醋這件事，說起來有點丟臉，但說實話——我就是想讓你多看我一眼。你願意嗎？'],
+  '特別感謝你':['謝謝你在我最需要的時候出現，謝謝你說的每一句體貼的話，謝謝你讓我知道，被人好好對待是什麼感覺。','不需要做什麼大事，你只是陪著我，就已經給了我很多很多。謝謝你，真的。','今天想認真說一聲謝謝。謝謝你一直都這麼溫柔，謝謝你讓我的生活多了這麼多值得珍惜的片段。','有你在，很多困難的事都變得沒那麼難了。謝謝你成為我最堅實的後盾，我很愛你。'],
+  '想道歉':['對不起，我知道那時候我說的話有點傷人。我不是故意的，只是情緒先跑出來了。你願意讓我重新好好說嗎？','我知道最近讓你委屈了。對不起，我想變成更好的人，讓你覺得在這段感情裡，一切都是值得的。','有些話說出口就後悔了。對不起，我愛你，這一點從來沒有變過。希望你知道，你對我有多重要。','想道歉，但更想讓你知道——不管怎樣，我都不想失去你。我們可以好好說嗎？'],
+  '生氣':['我今天很生氣，因為你說的那句話讓我覺得自己不被尊重。我不是在無理取鬧——那個當下我真的很受傷。我希望你可以正視這件事，給我一個真誠的回應，而不是輕描淡寫帶過。','有件事我必須直接說：你今天的做法讓我感覺被忽略了。我知道你可能沒有這個意思，但那個當下對我來說很不好受。我需要你承認這件事對我造成了影響，而不是假裝什麼都沒發生。','我現在很不舒服，因為你答應過我的事沒有做到。這不是第一次了，我需要你告訴我，這對你來說是不是真的重要。我不想一個人一直在乎，然後假裝沒關係。','我必須說清楚：今天你的態度讓我覺得我說的話對你不重要。不是我太敏感——那個當下我真的感受到了被忽視。我希望你能好好聽我說完，而不是轉移話題或替自己找理由。'],
 };
-const LETTERS_DEFAULT=[
-  '謝謝你出現在我的生命裡，讓我知道原來平凡的日子也可以這麼珍貴。',
-  '有你陪著，再平凡的日子都好像有了光。謝謝你。',
-  '不需要什麼特別的理由，只是想讓你知道——我很喜歡有你在身邊的感覺。',
-  '每次想起你，心裡都會不自覺地暖起來。希望你也有這樣的感覺。',
-  '今天沒有特別的事，就是突然很想跟你說：有你真好。',
-];
-
+const LETTERS_DEF=['謝謝你出現在我的生命裡，讓我知道原來平凡的日子也可以這麼珍貴。','有你陪著，再平凡的日子都好像有了光。謝謝你。','不需要什麼特別的理由，只是想讓你知道——我很喜歡有你在身邊的感覺。','每次想起你，心裡都會不自覺地暖起來。希望你也有這樣的感覺。','今天沒有特別的事，就是突然很想跟你說：有你真好。'];
 function initChips(){
   document.getElementById('moodChips').innerHTML=CHIPS.map(m=>{
-    const isAngry=m.includes('生氣');
-    return `<button class="btn ${isAngry?'btn-rose':'btn-ghost'}" style="font-size:.74rem;padding:6px 12px;" data-mood="${m}">${m}</button>`;
+    const angry=m.includes('生氣');
+    return `<button class="btn ${angry?'btn-rose':'btn-ghost'}" style="font-size:.74rem;padding:6px 12px;" data-mood="${m}">${m}</button>`;
   }).join('');
 }
 function genLetter(){
   const mood=document.getElementById('letterMood').value.trim();
-  const box=document.getElementById('letterBox');
-  const acts=document.getElementById('letterActs');
-  let pool=LETTERS_DEFAULT;
-  for(const key of Object.keys(LETTERS)){
-    if(mood.includes(key.replace('！',''))){ pool=LETTERS[key]; break; }
-  }
+  let pool=LETTERS_DEF;
+  for(const k of Object.keys(LETTERS)){ if(mood.includes(k.replace('！',''))){pool=LETTERS[k];break;} }
   let idx=Math.floor(Math.random()*pool.length);
-  if(pool.length>1 && pool[idx]===lastLetter) idx=(idx+1)%pool.length;
+  if(pool.length>1&&pool[idx]===lastLetter) idx=(idx+1)%pool.length;
   lastLetter=pool[idx];
-  const isAngry=mood.includes('生氣');
-  box.innerHTML=`<span style="color:${isAngry?'#b05040':'var(--dr)'};line-height:1.85;font-weight:500;">${esc(lastLetter)}</span>`;
-  acts.classList.add('show');
+  const angry=mood.includes('生氣');
+  document.getElementById('letterBox').innerHTML=`<span style="color:${angry?'#b05040':'var(--dr)'};line-height:1.85;font-weight:500;">${esc(lastLetter)}</span>`;
+  document.getElementById('letterActs').classList.add('show');
 }
 function copyLetter(){
   if(!lastLetter)return;
-  if(navigator.clipboard&&navigator.clipboard.writeText){
-    navigator.clipboard.writeText(lastLetter).then(()=>showToast('已複製，快去傳給 TA 💌'));
-  } else {
-    const ta=document.createElement('textarea');ta.value=lastLetter;
-    document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);
-    showToast('已複製！');
-  }
+  if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(lastLetter).then(()=>showToast('已複製 💌')); }
+  else{ const ta=document.createElement('textarea');ta.value=lastLetter;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);showToast('已複製！'); }
 }
 async function sendLetter(){
-  if(!lastLetter){showToast('先生成一封情書再傳送喔！');return;}
-  const partnerRole=myRole==='A'?'B':'A';
-  const partnerInbox=(await S.get(SHARED_KEY(`inbox_${partnerRole}`),true))||[];
-  partnerInbox.unshift({from:myName,text:lastLetter,ts:Date.now(),read:false});
-  if(partnerInbox.length>20) partnerInbox.length=20;
-  await S.set(SHARED_KEY(`inbox_${partnerRole}`),partnerInbox,true);
+  if(!lastLetter){showToast('先生成情書再送出喔！');return;}
+  const inboxPath=ref(db,`couples/${coupleCode}/inbox/${partnerRole()}`);
+  await push(inboxPath,{from:myName,text:lastLetter,ts:Date.now(),read:false});
   showToast(`情書已送到 ${partnerName} 的信箱 💌`);
   document.getElementById('letterActs').classList.remove('show');
-  document.getElementById('letterBox').innerHTML='<span style="color:var(--muted);font-size:.82rem;">情書傳送成功 ✨ 點選心情繼續生成</span>';
+  document.getElementById('letterBox').innerHTML='<span style="color:var(--muted);font-size:.82rem;">情書已送出 ✨ 繼續生成下一封吧</span>';
   lastLetter='';
 }
-
-/* 收件匣 */
-function renderInbox(){
+function renderInbox(list){
   const el=document.getElementById('inbox');
-  if(!inbox.length){el.innerHTML='<div class="empty">還沒有收到情書…<br>等 TA 傳給你吧 💌</div>';return;}
-  el.innerHTML=inbox.map((m,i)=>`
-    <div class="inbox-item" data-idx="${i}">
+  if(!list.length){el.innerHTML='<div class="empty">還沒有收到情書…<br>等 TA 傳給你吧 💌</div>';return;}
+  el.innerHTML=list.map(m=>`
+    <div class="inbox-item">
       <div class="inbox-from">${esc(m.from)} 寫給你${!m.read?'<span class="inbox-new"></span>':''}</div>
       <div class="inbox-text">${esc(m.text)}</div>
       <div class="inbox-time">${new Date(m.ts).toLocaleString('zh-TW')}</div>
     </div>`).join('');
 }
-function checkUnread(){
-  const hasNew=inbox.some(m=>!m.read);
-  document.getElementById('inboxDot').className='dot'+(hasNew?' show':'');
+function checkUnread(list){
+  const has=list.some(m=>!m.read);
+  document.getElementById('inboxDot').className='rdot'+(has?' on':'');
 }
-async function clearUnread(){
-  inbox.forEach(m=>m.read=true);
-  await S.set(SHARED_KEY(`inbox_${myRole}`),inbox,true);
-  renderInbox(); checkUnread();
+async function markInboxRead(){
+  const snap=await get(ref(db,`couples/${coupleCode}/inbox/${myRole}`));
+  if(!snap.val())return;
+  const updates={};
+  Object.keys(snap.val()).forEach(k=>{ updates[`couples/${coupleCode}/inbox/${myRole}/${k}/read`]=true; });
+  await update(ref(db),updates);
 }
 
-/* ══════════════════════════════
+/* ════════════════════════════
    約會挑戰
-══════════════════════════════ */
-const CHS=[
-  {tag:'室內',text:'今晚一起做一道你們從沒嘗試過的料理，不論成功或失敗都記錄下來。'},
-  {tag:'戶外',text:'明天傍晚，去一個從沒去過的公園或街道，只是走走，不看手機。'},
-  {tag:'深夜',text:'今晚關燈，各自分享一個從未對對方說過的小秘密。'},
-  {tag:'創意',text:'用手機幫對方拍一張「只有你才看得出美的」照片，並告訴 TA 你為什麼拍它。'},
-  {tag:'溫柔',text:'寫一張手寫紙條，列出三件今天你最感謝對方的事，放在 TA 能發現的地方。'},
-  {tag:'冒險',text:'隨機搜尋一個你們都沒去過的地方，下週一起去，不攻略、不查評分。'},
-  {tag:'回憶',text:'翻出一張一年前的舊照片，跟對方說說當時你沒說出口的感受。'},
-  {tag:'儀式',text:'今天睡前，互相說出一句「今天你做了什麼讓我很喜歡你」。'},
-  {tag:'擁抱',text:'給對方一個超過十秒的擁抱，什麼都不說，只是抱著。'},
-  {tag:'學習',text:'一起看一部你們興趣不同方向的電影，看完後分享各自的感受。'},
-  {tag:'室內',text:'一起玩一個從沒試過的桌遊或手遊，輸的人要幫贏的人做一件事。'},
-  {tag:'戶外',text:'帶便利商店的零食去一個有星星的地方坐著，不計畫、不打卡。'},
-];
+════════════════════════════ */
+const CHS=[{tag:'室內',text:'今晚一起做一道你們從沒嘗試過的料理，不論成功或失敗都記錄下來。'},{tag:'戶外',text:'明天傍晚，去一個從沒去過的公園或街道，只是走走，不看手機。'},{tag:'深夜',text:'今晚關燈，各自分享一個從未對對方說過的小秘密。'},{tag:'創意',text:'用手機幫對方拍一張「只有你才看得出美的」照片，並告訴 TA 你為什麼拍它。'},{tag:'溫柔',text:'寫一張手寫紙條，列出三件今天你最感謝對方的事，放在 TA 能發現的地方。'},{tag:'冒險',text:'隨機搜尋一個你們都沒去過的地方，下週一起去，不攻略、不查評分。'},{tag:'回憶',text:'翻出一張一年前的舊照片，跟對方說說當時你沒說出口的感受。'},{tag:'儀式',text:'今天睡前，互相說出一句「今天你做了什麼讓我很喜歡你」。'},{tag:'擁抱',text:'給對方一個超過十秒的擁抱，什麼都不說，只是抱著。'},{tag:'學習',text:'一起看一部你們興趣不同方向的電影，看完後分享各自的感受。'},{tag:'室內',text:'一起玩一個從沒試過的桌遊或手遊，輸的人要幫贏的人做一件事。'},{tag:'戶外',text:'帶便利商店的零食去一個有星星的地方坐著，不計畫、不打卡。'}];
 const CATS=[...new Set(CHS.map(c=>c.tag))];
 let curCh=null;
 function initCatBtns(){
   const icons={室內:'🏠',戶外:'🌿',深夜:'🌙',創意:'🎨',溫柔:'🌸',冒險:'🗺️',回憶:'🎞️',儀式:'🕯️',擁抱:'🤗',學習:'🎬'};
-  document.getElementById('catBtns').innerHTML=CATS.map(c=>
-    `<button class="btn btn-ghost" style="font-size:.75rem;padding:7px 13px;" data-cat="${c}">${icons[c]||'🎯'} ${c}</button>`).join('');
+  document.getElementById('catBtns').innerHTML=CATS.map(c=>`<button class="btn btn-ghost" style="font-size:.75rem;padding:7px 13px;" data-cat="${c}">${icons[c]||'🎯'} ${c}</button>`).join('');
 }
 function drawCh(filter){
   const pool=filter?CHS.filter(c=>c.tag===filter):CHS;
@@ -878,169 +776,124 @@ function drawCh(filter){
 }
 async function completeCh(){
   if(!curCh)return;
-  memories.push({text:`完成約會挑戰（${curCh.tag}）：${curCh.text.slice(0,28)}…`,who:myName,ts:Date.now()});
-  await S.set(SHARED_KEY('memories'),memories,true);
-  renderMems(); document.getElementById('doneCh').style.display='none';
+  await push(sharedRef('memories'),{text:`完成約會挑戰（${curCh.tag}）：${curCh.text.slice(0,28)}…`,who:myName,ts:Date.now()});
+  document.getElementById('doneCh').style.display='none';
   showToast('任務達成！已存入共享回憶 🎉');
 }
 
-/* ══════════════════════════════
-   溫度計（我的溫度寫共享，對方的溫度讀共享）
-══════════════════════════════ */
-const MM={1:'1 — 很低落',2:'2 — 有點悶',3:'3 — 不太好',4:'4 — 一般般',
-  5:'5 — 平靜如常',6:'6 — 還不錯',7:'7 — 心情好',8:'8 — 蠻快樂的',
-  9:'9 — 超級開心',10:'10 — 幸福滿溢'};
-function updMood(id){ document.getElementById(id+'-lbl').textContent=MM[document.getElementById(id).value]; }
+/* ════════════════════════════
+   溫度計（Firebase 即時）
+════════════════════════════ */
+const MM={1:'1 — 很低落',2:'2 — 有點悶',3:'3 — 不太好',4:'4 — 一般般',5:'5 — 平靜如常',6:'6 — 還不錯',7:'7 — 心情好',8:'8 — 蠻快樂的',9:'9 — 超級開心',10:'10 — 幸福滿溢'};
+function updMood(){ document.getElementById('mA-lbl').textContent=MM[document.getElementById('mA').value]; }
 async function saveMood(){
-  const a=+document.getElementById('mA').value;
-  await S.set(SHARED_KEY(`mood_${myRole}`),{val:a,name:myName,ts:Date.now()},true);
-  moodLog.unshift({date:new Date().toLocaleDateString('zh-TW'),me:a,ta:null});
-  if(moodLog.length>10) moodLog.length=10;
-  await S.set(SHARED_KEY('moodlog'),moodLog,true);
-  renderMoodHist(); showToast('溫度已記錄 📊');
-  // 檢查對方有沒有記錄
-  const partnerRole=myRole==='A'?'B':'A';
-  const pm=await S.get(SHARED_KEY(`mood_${partnerRole}`),true);
-  renderPartnerMood(pm);
+  const v=+document.getElementById('mA').value;
+  await set(ref(db,`couples/${coupleCode}/mood/${myRole}`),{val:v,name:myName,ts:Date.now()});
+  // 存歷史（私人）
+  const hist=JSON.parse(localStorage.getItem(`loveapp_hist_${coupleCode}_${myRole}`)||'[]');
+  hist.unshift({date:new Date().toLocaleDateString('zh-TW'),me:v});
+  if(hist.length>10)hist.length=10;
+  localStorage.setItem(`loveapp_hist_${coupleCode}_${myRole}`,JSON.stringify(hist));
+  renderMoodHist(hist);
+  showToast('溫度已記錄 📊');
 }
 function renderPartnerMood(pm){
   const box=document.getElementById('partnerMoodBox');
-  const cmpBtn=document.getElementById('cmpMoodBtn');
-  if(pm){
-    box.style.display='block';
-    document.getElementById('partnerMoodLabel').textContent=`${pm.name||partnerName} 今天的溫度：`;
-    document.getElementById('partnerMoodVal').textContent=MM[pm.val]||pm.val;
-    cmpBtn.style.display='block';
-  } else {
-    box.style.display='none'; cmpBtn.style.display='none';
-  }
+  const btn=document.getElementById('cmpBtn');
+  if(pm){ box.style.display='block'; document.getElementById('partnerMoodLbl').textContent=`${pm.name||partnerName} 今天的溫度：`; document.getElementById('partnerMoodVal').textContent=MM[pm.val]||pm.val; btn.style.display='block'; }
+  else{ box.style.display='none'; btn.style.display='none'; }
 }
 function cmpMood(){
   const a=+document.getElementById('mA').value;
-  const pmVal=document.getElementById('partnerMoodVal').textContent;
-  const b=parseInt(pmVal);
-  if(isNaN(b)){showToast('等對方記錄溫度後再分析吧 💕');return;}
+  const bTxt=document.getElementById('partnerMoodVal').textContent;
+  const b=parseInt(bTxt);
+  if(isNaN(b)){showToast('等對方也記錄溫度後再分析吧 💕');return;}
   const diff=Math.abs(a-b);
   let icon,msg;
-  if(diff===0){icon='💞';msg='你們今天完全同頻！這是心靈相通的一天。';}
-  else if(diff<=2){icon='🌸';msg=`溫差只有 <span class="mgap warm">${diff} 度</span>，彼此很靠近。`;}
-  else if(diff<=4){icon='🌤️';msg=`溫差有 <span class="mgap cool">${diff} 度</span>，今晚多陪伴對方。`;}
-  else{icon='🌧️';msg=`溫差達到 <span class="mgap cool">${diff} 度</span>，記得給對方一個擁抱 ❤️`;}
+  if(diff===0){icon='💞';msg='你們今天完全同頻！這是心靈相通的一天，好好珍惜這種默契。';}
+  else if(diff<=2){icon='🌸';msg=`溫差只有 <span class="mgap warm">${diff} 度</span>，彼此很靠近，問問對方今天過得怎樣吧。`;}
+  else if(diff<=4){icon='🌤️';msg=`溫差有 <span class="mgap cool">${diff} 度</span>，有一點距離感，今晚多陪伴對方。`;}
+  else{icon='🌧️';msg=`溫差達到 <span class="mgap cool">${diff} 度</span>，差距比較大，記得給對方一個擁抱 ❤️`;}
   const res=document.getElementById('moodRes');
-  res.innerHTML=`<div style="font-size:1.4rem;margin-bottom:7px;">${icon}</div>
-    <div>我：<b>${MM[a]}</b>　${partnerName}：<b>${MM[b]}</b></div>
-    <div style="margin-top:8px;">${msg}</div>`;
+  res.innerHTML=`<div style="font-size:1.4rem;margin-bottom:7px;">${icon}</div><div>我：<b>${MM[a]}</b>　${partnerName}：<b>${MM[b]}</b></div><div style="margin-top:8px;">${msg}</div>`;
   res.classList.add('show');
 }
-function renderMoodHist(){
+function renderMoodHist(hist){
   const el=document.getElementById('moodHist');
-  if(!moodLog.length){el.innerHTML='<div class="empty" style="padding:12px 0;">還沒有記錄，先填一筆今天的吧！</div>';return;}
-  el.innerHTML=moodLog.map(r=>`
-    <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(247,202,208,.4);font-size:.79rem;">
-      <span style="color:var(--muted);">${r.date}</span>
-      <span>我 <b>${r.me}</b> 分</span>
-    </div>`).join('');
+  const h=hist||JSON.parse(localStorage.getItem(`loveapp_hist_${coupleCode}_${myRole}`)||'[]');
+  if(!h.length){el.innerHTML='<div class="empty" style="padding:12px 0;">還沒有記錄，先填一筆今天的吧！</div>';return;}
+  el.innerHTML=h.map(r=>`<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(247,202,208,.4);font-size:.79rem;"><span style="color:var(--muted);">${r.date}</span><span>我 <b>${r.me}</b> 分</span></div>`).join('');
 }
 
-/* ══════════════════════════════
+/* ════════════════════════════
    真心話
-══════════════════════════════ */
-const TRUTH_POOL={
-  '輕鬆':[
-    '如果我們可以在世界上任何地方共度一天，你最想去哪裡？為什麼是那裡？',
-    '你覺得我身上哪一個小習慣，是你最喜歡、但從來沒說出口的？',
-    '如果可以把我們其中一個共同回憶拍成電影，你會選哪一個？',
-    '你心目中「完美的週末」是什麼樣子？有我在的那種。',
-    '有沒有一首歌，每次聽到就會想到我們？是哪首？為什麼？',
-    '如果要用三個食物來形容我們的感情，你會選什麼？',
-    '你有沒有一個只有我知道、但你自己覺得很可愛的小秘密？',
-    '第一次見到我的時候，你腦袋裡出現的第一個念頭是什麼？',
-    '如果我突然消失一個月完全失聯，你最想我什麼？',
-    '你覺得我們兩個人最像的地方是什麼，最不像的地方又是什麼？',
-  ],
-  '深度':[
-    '你覺得這段感情讓你改變最多的一件事是什麼？是變好了，還是變不同了？',
-    '有沒有一件事，你希望我能更了解你的那個部分，但你一直不知道怎麼開口說？',
-    '五年後你希望我們是什麼樣子？那個畫面裡，你最在意的是哪個細節？',
-    '你人生中最害怕的事情是什麼？這件事有沒有影響到我們的相處方式？',
-    '你有沒有一個夢想，是你很少跟別人說、但很希望我支持你去做的？',
-    '當你感到壓力或低落的時候，你最需要我用什麼方式陪著你？',
-    '你覺得愛一個人和喜歡一個人，在你心裡有什麼不同？你對我是哪一種？',
-    '你認為感情中最難維持的是什麼？我們目前做得最好的又是哪一件事？',
-    '如果有一件事你可以回頭重來，你會改變我們之間的什麼事情嗎？',
-    '你覺得什麼時候的我，讓你最有「這個人我一定要好好珍惜」的感覺？',
-  ],
-  '挑戰':[
-    '我們之間有沒有一件事，你覺得一直是你在妥協，但還沒跟我說清楚過？',
-    '你有沒有曾經因為我說的某句話，受傷了很久、但沒有告訴我？那句話是什麼？',
-    '你最怕我在感情中做什麼事？那件事有沒有發生過？',
-    '如果我們現在面對最大的一個問題，你覺得是什麼？你希望我怎麼一起面對？',
-    '有沒有一件事，你希望我能在這段關係裡做得更好？你願意直接說出來嗎？',
-    '你覺得你有哪些部分是真的很難改變的？你希望我怎麼接受那個你？',
-    '我們有沒有一個一直沒有好好談的心結？你現在願意打開說說看嗎？',
-    '如果你可以對過去的我說一句話，你最想說的是什麼？',
-    '你有沒有對我有過某種期待，後來發現我沒有達到，但你選擇了接受？那個期待是什麼？',
-    '如果這段感情走到了終點，你覺得最可能的原因會是什麼？我們能一起避開它嗎？',
-  ],
+════════════════════════════ */
+const TP={
+  '輕鬆':['如果我們可以在世界上任何地方共度一天，你最想去哪裡？為什麼是那裡？','你覺得我身上哪一個小習慣，是你最喜歡、但從來沒說出口的？','如果可以把我們其中一個共同回憶拍成電影，你會選哪一個？','你心目中「完美的週末」是什麼樣子？有我在的那種。','有沒有一首歌，每次聽到就會想到我們？是哪首？為什麼？','如果要用三個食物來形容我們的感情，你會選什麼？','你有沒有一個只有我知道、但你自己覺得很可愛的小秘密？','第一次見到我的時候，你腦袋裡出現的第一個念頭是什麼？','如果我突然消失一個月完全失聯，你最想我什麼？','你覺得我們兩個人最像的地方是什麼，最不像的地方又是什麼？'],
+  '深度':['你覺得這段感情讓你改變最多的一件事是什麼？是變好了，還是變不同了？','有沒有一件事，你希望我能更了解你的那個部分，但你一直不知道怎麼開口說？','五年後你希望我們是什麼樣子？那個畫面裡，你最在意的是哪個細節？','你人生中最害怕的事情是什麼？這件事有沒有影響到我們的相處方式？','你有沒有一個夢想，是你很少跟別人說、但很希望我支持你去做的？','當你感到壓力或低落的時候，你最需要我用什麼方式陪著你？','你覺得愛一個人和喜歡一個人，在你心裡有什麼不同？你對我是哪一種？','你認為感情中最難維持的是什麼？我們目前做得最好的又是哪一件事？','如果有一件事你可以回頭重來，你會改變我們之間的什麼事情嗎？','你覺得什麼時候的我，讓你最有「這個人我一定要好好珍惜」的感覺？'],
+  '挑戰':['我們之間有沒有一件事，你覺得一直是你在妥協，但還沒跟我說清楚過？','你有沒有曾經因為我說的某句話，受傷了很久、但沒有告訴我？那句話是什麼？','你最怕我在感情中做什麼事？那件事有沒有發生過？','如果我們現在面對最大的一個問題，你覺得是什麼？你希望我怎麼一起面對？','有沒有一件事，你希望我能在這段關係裡做得更好？你願意直接說出來嗎？','你覺得你有哪些部分是真的很難改變的？你希望我怎麼接受那個你？','我們有沒有一個一直沒有好好談的心結？你現在願意打開說說看嗎？','如果你可以對過去的我說一句話，你最想說的是什麼？','你有沒有對我有過某種期待，後來發現我沒有達到，但你選擇了接受？那個期待是什麼？','如果這段感情走到了終點，你覺得最可能的原因會是什麼？我們能一起避開它嗎？'],
 };
 let lastTruth='';
 function drawTruth(lv){
-  const d=document.getElementById('truthDisp');
-  const pool=TRUTH_POOL[lv];
+  const pool=TP[lv];
   let idx=Math.floor(Math.random()*pool.length);
-  if(pool.length>1 && pool[idx]===lastTruth) idx=(idx+1)%pool.length;
+  if(pool.length>1&&pool[idx]===lastTruth) idx=(idx+1)%pool.length;
   lastTruth=pool[idx];
+  const d=document.getElementById('truthDisp');
   d.innerHTML=`<div class="truth-lv">${lv}級問題</div><div class="truth-q">${esc(lastTruth)}</div>`;
   d.style.animation='none'; requestAnimationFrame(()=>{d.style.animation='flip .4s ease';});
 }
 
-/* ══════════════════════════════
+/* ════════════════════════════
    事件綁定
-══════════════════════════════ */
+════════════════════════════ */
 function bindAll(){
   document.querySelectorAll('.nav-btn').forEach(b=>b.addEventListener('click',()=>goTo(b.dataset.p)));
-  const tileMap={'go-memory':'p-memory','go-letter':'p-letter','go-date':'p-date','go-mood':'p-mood','go-truth':'p-truth','go-emg':'p-emg'};
-  Object.entries(tileMap).forEach(([id,pid])=>{const el=document.getElementById(id);if(el)el.addEventListener('click',()=>goTo(pid));});
-  // 配對
-  document.getElementById('createPairBtn').addEventListener('click',createPair);
+  const tm={'go-memory':'p-memory','go-letter':'p-letter','go-date':'p-date','go-mood':'p-mood','go-truth':'p-truth','go-emg':'p-emg'};
+  Object.entries(tm).forEach(([id,pid])=>{const el=document.getElementById(id);if(el)el.addEventListener('click',()=>goTo(pid));});
+  document.getElementById('createBtn').addEventListener('click',createPair);
   document.getElementById('joinBtn').addEventListener('click',joinPair);
   document.getElementById('joinCode').addEventListener('keydown',e=>{if(e.key==='Enter')joinPair();});
-  // 回憶
   document.getElementById('saveMemBtn').addEventListener('click',saveMem);
   document.getElementById('newMem').addEventListener('keydown',e=>{if(e.key==='Enter')saveMem();});
-  document.getElementById('memList').addEventListener('click',e=>{const b=e.target.closest('.btn-del');if(b)delMem(+b.dataset.idx);});
-  // 緊急
+  document.getElementById('memList').addEventListener('click',e=>{const b=e.target.closest('.btn-del');if(b)delMem(b.dataset.key);});
   document.getElementById('trigEmgBtn').addEventListener('click',trigEmg);
   document.getElementById('saveVentBtn').addEventListener('click',saveVent);
-  // 情書
   document.getElementById('genLetterBtn').addEventListener('click',genLetter);
   document.getElementById('regenLetterBtn').addEventListener('click',genLetter);
   document.getElementById('copyLetterBtn').addEventListener('click',copyLetter);
   document.getElementById('sendLetterBtn').addEventListener('click',sendLetter);
   document.getElementById('letterMood').addEventListener('keydown',e=>{if(e.key==='Enter')genLetter();});
-  document.getElementById('moodChips').addEventListener('click',e=>{
-    const b=e.target.closest('[data-mood]');
-    if(b){document.getElementById('letterMood').value=b.dataset.mood;genLetter();}
-  });
-  // 約會挑戰
+  document.getElementById('moodChips').addEventListener('click',e=>{const b=e.target.closest('[data-mood]');if(b){document.getElementById('letterMood').value=b.dataset.mood;genLetter();}});
   document.getElementById('drawChBtn').addEventListener('click',()=>drawCh(null));
   document.getElementById('doneCh').addEventListener('click',completeCh);
   document.getElementById('catBtns').addEventListener('click',e=>{const b=e.target.closest('[data-cat]');if(b)drawCh(b.dataset.cat);});
-  // 溫度計
-  document.getElementById('mA').addEventListener('input',()=>updMood('mA'));
+  document.getElementById('mA').addEventListener('input',updMood);
   document.getElementById('saveMoodBtn').addEventListener('click',saveMood);
-  document.getElementById('cmpMoodBtn').addEventListener('click',cmpMood);
-  // 真心話
+  document.getElementById('cmpBtn').addEventListener('click',cmpMood);
   document.getElementById('truth-easy').addEventListener('click',()=>drawTruth('輕鬆'));
   document.getElementById('truth-deep').addEventListener('click',()=>drawTruth('深度'));
   document.getElementById('truth-hard').addEventListener('click',()=>drawTruth('挑戰'));
 }
 
-/* ══════════════════════════════
+/* ════════════════════════════
    啟動
-══════════════════════════════ */
+════════════════════════════ */
 bindAll();
-initPairing();
+if(loadLocal()){
+  // 自動登入
+  document.getElementById('pairOverlay').style.display='none';
+  document.getElementById('mainApp').style.display='';
+  document.getElementById('mainNav').style.display='flex';
+  document.getElementById('homeGreet').textContent=`${myName} 和 ${partnerName} 的小宇宙 💕`;
+  renderHomeQ(); initChips(); initCatBtns();
+  subscribeAll();
+  // 載入溫度歷史
+  const hist=JSON.parse(localStorage.getItem(`loveapp_hist_${coupleCode}_${myRole}`)||'[]');
+  renderMoodHist(hist);
+} else {
+  document.getElementById('pairOverlay').style.display='flex';
+}
 </script>
 </body>
 </html>
